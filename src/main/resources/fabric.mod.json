@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "nebajs-enchantment-rework",
+	"version": "${version}",
+	"name": "Nebaj's Enchantment Rework",
+	"description": "Simple vanilla friendly enchantment rework",
+	"authors": [
+		"Nebaj"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT-License",
+	"icon": "assets/nebajs-enchantment-rework/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentRework"
+		],
+		"fabric-datagen": [
+			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentReworkDataGenerator"
+		]
+	},
+	"mixins": [
+		"nebajs-enchantment-rework.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
