@@ -1,7 +1,7 @@
 package com.nebaj.nebajsenchantmentrework.mixin;
 
 import com.nebaj.nebajsenchantmentrework.BookshelfScanner;
-import com.nebaj.nebajsenchantmentrework.ModTags;
+import com.nebaj.nebajsenchantmentrework.tags.ModTags;
 import net.minecraft.core.Holder;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -22,37 +22,41 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 @Mixin(EnchantmentMenu.class)
-public abstract class EnchantmentMenuMixin {
-
-    @Shadow @Final private ContainerLevelAccess access;
+public abstract class EnchantmentMenuMixin
+{
+    @Shadow
+    @Final
+    private ContainerLevelAccess access;
 
     @Unique
     private Set<Holder<Enchantment>> nebajsenchantmentrework$unlocked = Set.of();
 
     @Inject(method = "slotsChanged", at = @At("HEAD"))
-    private void nebajsenchantmentrework$onSlotsChanged(Container container, CallbackInfo ci) {
+    private void nebajsenchantmentrework$onSlotsChanged(Container container, CallbackInfo callbackInfo)
+    {
         nebajsenchantmentrework$rescan();
     }
 
     @Inject(method = "clickMenuButton", at = @At("HEAD"))
-    private void nebajsenchantmentrework$onClickMenuButton(Player player, int buttonId, CallbackInfoReturnable<Boolean> cir) {
+    private void nebajsenchantmentrework$onClickMenuButton(Player player, int buttonId, CallbackInfoReturnable<Boolean> callbackInfoReturnable)
+    {
         nebajsenchantmentrework$rescan();
     }
 
-    @ModifyArg(
-            method = "getEnchantmentList",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;selectEnchantment(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Ljava/util/List;"),
+    @ModifyArg(method = "getEnchantmentList", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/item/enchantment/EnchantmentHelper;selectEnchantment(Lnet/minecraft/util/RandomSource;Lnet/minecraft/world/item/ItemStack;ILjava/util/stream/Stream;)Ljava/util/List;"),
             index = 3)
-    private Stream<Holder<Enchantment>> nebajsenchantmentrework$filterPool(Stream<Holder<Enchantment>> vanilla) {
+    private Stream<Holder<Enchantment>> nebajsenchantmentrework$filterPool(Stream<Holder<Enchantment>> vanilla)
+    {
         return Stream.concat(
-                vanilla.filter(h -> !h.is(ModTags.ENCHANTMENTTABLE_ENCHANTMENTS_REQUIRING_BOOK)),
+                vanilla.filter(enchantmentHolder -> !enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)),
                 nebajsenchantmentrework$unlocked.stream()
         );
     }
 
     @Unique
-    private void nebajsenchantmentrework$rescan() {
-        access.execute((level, pos) -> nebajsenchantmentrework$unlocked = BookshelfScanner.scan(level, pos));
+    private void nebajsenchantmentrework$rescan()
+    {
+        access.execute((level, blockPos) -> nebajsenchantmentrework$unlocked = BookshelfScanner.scan(level, blockPos));
     }
 }

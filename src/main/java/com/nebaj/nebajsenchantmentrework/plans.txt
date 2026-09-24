@@ -1,36 +1,66 @@
+==============================
+ENCHANTMENT TABLE
+==============================
 
+## Learning treasure enchantments
+- Teach treasure enchantments to enchantment table by having them in chiseled bookshelves around enchantment table
+- Let chiseled bookshelves count towards bookshelves for enchantment table if they have at least 1 enchanted book in them
+
+## New UI
 - Enchantment table new UI
-* Show all possible enchantments for item (first normal then treasure enchantments (with specific highlight))
-* You can buy a level of an enchantment for that piece of gear costing xp and a material cost
-* You always see how much the next level would cost till it maxes out.
-* Some way to visually show mutually exclusive enchantments
-* Not unlocked treasure enchantments show as ???? and when hovered over it explains that you must place a chiseled bookshelf containing the correct enchanted book to teach this enchantment. And then a cryptic clue as to where to find this one
-
-- Move some normal enchantments to be treasure enchantments and specific locations for enchantments
-* Depth strider (ocean ruins and burried treasures) and
-* Aqua affinty (drop from elder guardian)
-* Luck of the Sea (Shipwrecks)
-* Frost Walker: Igloos and Snowy Villages
-* Swift Sneak and Keeping: Ancient Cities
-* Magma Strider: Ruined Nether Portals
-* Crust Walker: Nether Fortresses
-* Wind Burst: Trial Chambers
-* Soul Speed: Bastions
-* Beheading: End Cities
-* Multishot: Pillager Outposts
-* Flame: Nether Fortresses
-
-
-- No xp cost for repairing with an anvil and renaming with an anvil
-
-- Potential new enchantments (Air Affinity, Crust Walker, Keeping, Preserving)
-* New Enchantment Beheading. (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) found in end cities (requiring book for enchantment table)
-
-- Let more stuff drop xp (farming, crystal buds, idk)
-- Let all levels take the same amount of time to reach
-
-- Change bane of athropods to also include more stuff and be broader
-
+  * Show all possible enchantments for item (first normal then treasure enchantments (with specific highlight))
+  * You can buy a level of an enchantment for that piece of gear costing xp and a material cost
+  * You always see how much the next level would cost till it maxes out.
+  * Some way to visually show mutually exclusive enchantments
+  * Not unlocked treasure enchantments show as ???? and when hovered over it explains that you must place a chiseled bookshelf containing the correct enchanted book to teach this enchantment. And then a cryptic clue as to where to find this one
 - For the different sharpness alternatives and protection alternatives have better hover over explanations
 
+
+==============================
+ENCHANTMENTS
+==============================
+
+## New enchantments
+- New enchantments (also given a specific location below): Magma Strider, Crust Walker, Beheading
+- Potential new enchantments (Air Affinity, Crust Walker, Keeping, Preserving)
+  * Beheading: (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) (requiring book for enchantment table)
+  * Preserving: Make repair cost less
+  * Keeping: Keep gear on death but lose level of keeping
+  * Maybe add mob Melee Protection (protects from More melee attack from mobs)
+
+## Treasure enchantments and their locations (old and new)
+- Move some normal enchantments to be treasure enchantments and specific locations for enchantments
+  * Depth Strider: Ocean Ruins and Buried Treasures
+  * Aqua Affinity: drop from Elder Guardian
+  * Luck of the Sea: Shipwrecks
+  * Frost Walker: Igloos and Snowy Villages
+  * Swift Sneak and Keeping: Ancient Cities
+  * Magma Strider (new): Ruined Nether Portals
+  * Crust Walker (new): Nether Fortresses
+  * Wind Burst: Trial Chambers
+  * Soul Speed: Bastions
+  * Beheading (new): End Cities
+  * Multishot: Pillager Outposts
+  * Flame: Nether Fortresses
+
+## Changes to existing enchantments
+- Change Bane of Arthropods to also include more stuff and be broader (Maybe rename)
 - Maxed out Fire Protection prevents all lava and fire damage
+- Make tridents drop more frequently and channeling work always (not only in thunderstorms)
+- Remove Mending
+
+
+==============================
+XP
+==============================
+- No xp cost for repairing with an anvil and renaming with an anvil
+- Let more stuff drop xp (farming, crystal buds, fishing idk)
+- Let all levels take the same amount of time to reach
+- Refund more xp on death and remove 7 level cap
+- Grindstone, refund more xp (or even let you unload onto book, idk yet?)
+
+
+==============================
+CONFIG
+==============================
+- Add config settings for most of these things

@@ -18,6 +18,9 @@
 		"main": [
 			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentRework"
 		],
+		"client": [
+			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentReworkClient"
+		],
 		"fabric-datagen": [
 			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentReworkDataGenerator"
 		]
