@@ -8,11 +8,12 @@ ENCHANTMENT TABLE
 
 ## New UI
 - Enchantment table new UI
-  * Show all possible enchantments for item (first normal then treasure enchantments (with specific highlight))
+  * Show all possible enchantments (scrollable list where normally options would be) for item (first normal then treasure enchantments (with specific highlight))
   * You can buy a level of an enchantment for that piece of gear costing xp and a material cost
   * You always see how much the next level would cost till it maxes out.
-  * Some way to visually show mutually exclusive enchantments
   * Not unlocked treasure enchantments show as ???? and when hovered over it explains that you must place a chiseled bookshelf containing the correct enchanted book to teach this enchantment. And then a cryptic clue as to where to find this one
+
+  * Some way to visually show mutually exclusive enchantments
 - For the different sharpness alternatives and protection alternatives have better hover over explanations
 
 

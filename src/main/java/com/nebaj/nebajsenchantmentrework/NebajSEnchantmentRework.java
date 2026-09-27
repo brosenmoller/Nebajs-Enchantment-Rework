@@ -4,6 +4,7 @@ import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import com.nebaj.nebajsenchantmentrework.event.ModEvents;
 import com.nebaj.nebajsenchantmentrework.loot.ModLootTables;
 import com.nebaj.nebajsenchantmentrework.menu.ModMenuTypes;
+import com.nebaj.nebajsenchantmentrework.network.OverhauledEnchantingTableNetworking;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.resources.Identifier;
 
@@ -22,6 +23,7 @@ public class NebajSEnchantmentRework implements ModInitializer
         ModLootTables.initialize();
         ModEvents.initialize();
         ModMenuTypes.registerModMenuTypes();
+        OverhauledEnchantingTableNetworking.registerCommon();
     }
 
     public static Identifier id(String path)

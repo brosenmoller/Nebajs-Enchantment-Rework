@@ -57,6 +57,6 @@ public abstract class EnchantmentMenuMixin
     @Unique
     private void nebajsenchantmentrework$rescan()
     {
-        access.execute((level, blockPos) -> nebajsenchantmentrework$unlocked = BookshelfScanner.scan(level, blockPos));
+        access.execute((level, blockPos) -> nebajsenchantmentrework$unlocked = BookshelfScanner.findEnchantedBooksInBookShelves(level, blockPos));
     }
 }

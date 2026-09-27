@@ -1,6 +1,6 @@
 package com.nebaj.nebajsenchantmentrework.event;
 
-import com.nebaj.nebajsenchantmentrework.menu.custom.OverhauledEnchantingTableMenu;
+import com.nebaj.nebajsenchantmentrework.menu.custom.OverhauledEnchantingMenu;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
@@ -37,7 +37,7 @@ public class ModEvents {
 
                     @Override
                     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player p) {
-                        return new OverhauledEnchantingTableMenu(id, inventory, blockPos);
+                        return new OverhauledEnchantingMenu(id, inventory, blockPos);
                     }
                 });
             }
