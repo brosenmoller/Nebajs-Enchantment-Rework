@@ -17,6 +17,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.util.Util;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -109,7 +110,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 vanillaEnchantments.filter(enchantmentHolder ->
                         !enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)),
                 unlockedEnchantments.stream()
-        );
+        ).filter(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
     }
 
     private void rescanUnlockedEnchantments()
@@ -155,7 +156,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
 
     private List<EnchantmentEntry> buildEntries(ItemStack itemStack)
     {
-        if (itemStack.isEmpty() || !itemStack.isEnchantable()) return List.of();
+        if (itemStack.isEmpty() || !itemStack.has(DataComponents.ENCHANTABLE)) return List.of();
 
         return access.evaluate((level, pos) ->
         {

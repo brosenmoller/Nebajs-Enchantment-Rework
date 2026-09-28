@@ -5,6 +5,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -37,7 +38,8 @@ public final class BookshelfScanner
                 ItemEnchantments itemEnchantments = itemStack.getOrDefault(DataComponents.STORED_ENCHANTMENTS, ItemEnchantments.EMPTY);
                 for (Holder<Enchantment> enchantmentHolder : itemEnchantments.keySet())
                 {
-                    if (enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK))
+                    if (enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)
+                            && !enchantmentHolder.is(EnchantmentTags.CURSE))
                     {
                         foundSet.add(enchantmentHolder);
                     }
