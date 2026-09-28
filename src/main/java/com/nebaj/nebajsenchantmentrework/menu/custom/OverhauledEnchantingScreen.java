@@ -20,7 +20,9 @@ import net.minecraft.util.ARGB;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import org.jspecify.annotations.NonNull;
 
@@ -73,7 +75,7 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
 
     private ItemStack last = ItemStack.EMPTY;
     private int scrollOffset = 0;
-    private List<EnchantmentEntry> observedEntries = List.of();
+    private Item observedItem = Items.AIR;
 
     public OverhauledEnchantingScreen(OverhauledEnchantingMenu menu, Inventory inventory, Component title)
     {
@@ -93,11 +95,11 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         super.containerTick();
 
         this.minecraft.player.experienceDisplayStartTick = this.minecraft.player.tickCount;
-        List<EnchantmentEntry> current = this.menu.getEnchantments();
+        Item currentItem = this.menu.getEnchantItem().getItem();
 
-        if (current != this.observedEntries)
+        if (currentItem != this.observedItem)
         {
-            this.observedEntries = current;
+            this.observedItem = currentItem;
             this.scrollOffset = 0;
         }
 
