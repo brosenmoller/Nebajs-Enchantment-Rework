@@ -1,5 +1,6 @@
 package com.nebaj.nebajsenchantmentrework;
 
+import com.nebaj.nebajsenchantmentrework.datagen.EnchantmentMenuDataGenerator;
 import com.nebaj.nebajsenchantmentrework.datagen.ModEnchantmentTagsProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -15,6 +16,7 @@ public class NebajSEnchantmentReworkDataGenerator implements DataGeneratorEntryp
         FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
         pack.addProvider(EnchantmentGenerator::new);
         pack.addProvider(ModEnchantmentTagsProvider::new);
+        pack.addProvider(EnchantmentMenuDataGenerator::new);
     }
 
     @Override

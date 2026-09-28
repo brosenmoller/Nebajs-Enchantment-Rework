@@ -1,8 +1,11 @@
 package com.nebaj.nebajsenchantmentrework.menu.custom;
 
 import com.nebaj.nebajsenchantmentrework.BookshelfScanner;
+import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryConfig;
+import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
+import com.nebaj.nebajsenchantmentrework.data.EnchantmentLevelCost;
 import com.nebaj.nebajsenchantmentrework.menu.ModMenuTypes;
-import com.nebaj.nebajsenchantmentrework.network.SyncUnlockedEnchantmentsPayload;
+import com.nebaj.nebajsenchantmentrework.network.SyncEnchantmentEntriesPayload;
 import com.nebaj.nebajsenchantmentrework.tags.ModTags;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
@@ -12,6 +15,9 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -38,16 +44,45 @@ import java.util.stream.Stream;
 
 public class OverhauledEnchantingMenu extends AbstractContainerMenu
 {
+    public enum DisabledReason
+    {
+        NONE,
+        LOCKED,
+        MAX_LEVEL,
+        INCOMPATIBLE
+    }
+
     public record EnchantmentEntry(
         Holder<Enchantment> enchantment,
         int currentLevel,
         int maxLevel,
         int xpCost,
         int materialCost,
-        boolean unlocked,
+        DisabledReason disabledReason,
+        Optional<Holder<Enchantment>> conflictingEnchantment,
         boolean treasure,
-        int registryId
-    ) { }
+        int registryId,
+        Optional<String> clueKey,
+        int currentBookshelfCount,
+        int requiredBookshelfCount
+    )
+    {
+        public static final StreamCodec<RegistryFriendlyByteBuf, EnchantmentEntry> STREAM_CODEC = StreamCodec.composite(
+            Enchantment.STREAM_CODEC, EnchantmentEntry::enchantment,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::currentLevel,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::maxLevel,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::xpCost,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::materialCost,
+            ByteBufCodecs.idMapper(i -> DisabledReason.values()[i], DisabledReason::ordinal), EnchantmentEntry::disabledReason,
+            ByteBufCodecs.optional(Enchantment.STREAM_CODEC), EnchantmentEntry::conflictingEnchantment,
+            ByteBufCodecs.BOOL, EnchantmentEntry::treasure,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::registryId,
+            ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), EnchantmentEntry::clueKey,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::currentBookshelfCount,
+            ByteBufCodecs.VAR_INT, EnchantmentEntry::requiredBookshelfCount,
+            EnchantmentEntry::new
+        );
+    }
 
     private static final int ENCHANTMENT_SLOT = 36;
     private static final int LAPIS_SLOT = 37;
@@ -60,6 +95,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
     private final ContainerLevelAccess access;
     private final Player player;
     private Set<Holder<Enchantment>> unlockedEnchantments = Set.of();
+    private int bookshelfCount = 0;
     private final Container enchantSlots = new SimpleContainer(2)
     {
         @Override
@@ -104,18 +140,18 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         });
     }
 
-    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> vanillaEnchantments)
+    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> applicable)
     {
-        return Stream.concat(
-                vanillaEnchantments.filter(enchantmentHolder ->
-                        !enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)),
-                unlockedEnchantments.stream()
-        ).filter(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
+        return applicable.filter(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
     }
 
     private void rescanUnlockedEnchantments()
     {
-        access.execute((level, blockPos) -> unlockedEnchantments = BookshelfScanner.findEnchantedBooksInBookShelves(level, blockPos));
+        access.execute((level, blockPos) ->
+        {
+            unlockedEnchantments = BookshelfScanner.findEnchantedBooksInBookShelves(level, blockPos);
+            bookshelfCount = BookshelfScanner.countBookShelves(level, blockPos);
+        });
     }
 
     @Override
@@ -124,35 +160,30 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         if (container != enchantSlots) return;
 
         boolean isClientSide = access.evaluate((level, pos) -> level.isClientSide(), true);
+        if (isClientSide) return;
 
-        if (!isClientSide)
-        {
-            rescanUnlockedEnchantments();
-
-            if (player instanceof ServerPlayer serverPlayer)
-            {
-                ServerPlayNetworking.send(serverPlayer, new SyncUnlockedEnchantmentsPayload(containerId, List.copyOf(unlockedEnchantments)));
-            }
-        }
-
+        rescanUnlockedEnchantments();
         enchantments = buildEntries(enchantSlots.getItem(0));
 
-        if (!isClientSide)
+        if (player instanceof ServerPlayer serverPlayer)
         {
-            broadcastChanges();
+            ServerPlayNetworking.send(serverPlayer, new SyncEnchantmentEntriesPayload(containerId, enchantments));
         }
+
+        broadcastChanges();
     }
 
-    public void applySyncedUnlockedEnchantments(List<Holder<Enchantment>> unlocked)
+    public void applySyncedEnchantmentEntries(List<EnchantmentEntry> entries)
     {
-        this.unlockedEnchantments = Set.copyOf(unlocked);
-        this.enchantments = buildEntries(enchantSlots.getItem(0));
+        this.enchantments = entries;
     }
 
     public List<EnchantmentEntry> getEnchantments()
     {
         return enchantments;
     }
+
+    private record SortableEnchantment(Holder<Enchantment> holder, boolean treasure, int order) { }
 
     private List<EnchantmentEntry> buildEntries(ItemStack itemStack)
     {
@@ -165,20 +196,65 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
 
             Stream<Holder<Enchantment>> applicable = getEnchantmentsForItem(registryAccess, itemStack);
 
-            List<Holder<Enchantment>> pool = filterPool(applicable)
-                    .sorted(Comparator.comparingInt(holder -> enchantmentRegistry.getId(holder.value())))
+            List<SortableEnchantment> pool = filterPool(applicable)
+                    .map(holder ->
+                    {
+                        boolean isTreasure = holder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK);
+                        int order = EnchantmentEntryDataLoader.INSTANCE
+                                .getOrFallback(holder.unwrapKey().orElseThrow().identifier(), holder.value().getMaxLevel())
+                                .order();
+                        return new SortableEnchantment(holder, isTreasure, order);
+                    })
+                    .sorted(Comparator.comparing(SortableEnchantment::treasure)
+                            .thenComparingInt(SortableEnchantment::order)
+                            .thenComparingInt(sortable -> enchantmentRegistry.getId(sortable.holder().value())))
                     .toList();
 
             List<EnchantmentEntry> built = new ArrayList<>(pool.size());
-            for (Holder<Enchantment> enchantmentHolder : pool)
+            for (SortableEnchantment sortable : pool)
             {
-                boolean isTreasure = enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK);
+                Holder<Enchantment> enchantmentHolder = sortable.holder();
+                boolean isTreasure = sortable.treasure();
                 boolean unlocked = !isTreasure || unlockedEnchantments.contains(enchantmentHolder);
                 int currentLevel = EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, itemStack);
                 int maxLevel = enchantmentHolder.value().getMaxLevel();
-                int xpCost = 1; // TEMPORARY HARDCODED
-                int materialCost = 1; // TEMPORARY HARDCODED
                 int registryId = enchantmentRegistry.getId(enchantmentHolder.value());
+
+                EnchantmentEntryConfig config = EnchantmentEntryDataLoader.INSTANCE
+                        .getOrFallback(enchantmentHolder.unwrapKey().orElseThrow().identifier(), maxLevel);
+
+                Optional<Holder<Enchantment>> conflictingEnchantment = Optional.empty();
+                Optional<String> clueKey = Optional.empty();
+                DisabledReason disabledReason;
+                int xpCost;
+                int materialCost;
+                int requiredBookshelves;
+
+                if (!unlocked)
+                {
+                    disabledReason = DisabledReason.LOCKED;
+                    clueKey = config.clue();
+                    xpCost = 0;
+                    materialCost = 0;
+                    requiredBookshelves = 0;
+                }
+                else
+                {
+                    EnchantmentLevelCost cost = config.costForLevel(Math.min(currentLevel + 1, maxLevel));
+                    xpCost = cost.xpCost();
+                    materialCost = cost.materialCost();
+                    requiredBookshelves = cost.requiredBookshelves();
+
+                    if (currentLevel >= maxLevel)
+                    {
+                        disabledReason = DisabledReason.MAX_LEVEL;
+                    }
+                    else
+                    {
+                        conflictingEnchantment = findIncompatibleEnchantment(itemStack, enchantmentHolder);
+                        disabledReason = conflictingEnchantment.isPresent() ? DisabledReason.INCOMPATIBLE : DisabledReason.NONE;
+                    }
+                }
 
                 built.add(new EnchantmentEntry(
                     enchantmentHolder,
@@ -186,9 +262,13 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                     maxLevel,
                     xpCost,
                     materialCost,
-                    unlocked,
+                    disabledReason,
+                    conflictingEnchantment,
                     isTreasure,
-                    registryId
+                    registryId,
+                    clueKey,
+                    bookshelfCount,
+                    requiredBookshelves
                 ));
             }
             return built;
@@ -209,14 +289,13 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         ItemStack currency = enchantSlots.getItem(1);
 
         if (itemStack.isEmpty()) return false;
-        if (!entry.unlocked()) return false;
-        if (entry.currentLevel() >= entry.maxLevel()) return false;
-        if (!isEnchantmentCompatibleWithExistingEnchantments(itemStack, entry.enchantment())) return false;
+        if (entry.disabledReason() != DisabledReason.NONE) return false;
 
         if (player.hasInfiniteMaterials()) return true;
 
         if (player.experienceLevel < entry.xpCost()) return false;
         if (currency.getCount() < entry.materialCost()) return false;
+        if (entry.currentBookshelfCount() < entry.requiredBookshelfCount()) return false;
 
         return true;
     }
@@ -274,12 +353,15 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 .findFirst();
     }
 
-    private boolean isEnchantmentCompatibleWithExistingEnchantments(ItemStack itemStack, Holder<Enchantment> candidate)
+    private Optional<Holder<Enchantment>> findIncompatibleEnchantment(ItemStack itemStack, Holder<Enchantment> candidate)
     {
         ItemEnchantments existing = itemStack.getOrDefault(DataComponents.ENCHANTMENTS, ItemEnchantments.EMPTY);
-        Set<Holder<Enchantment>> others = new HashSet<>(existing.keySet());
-        others.remove(candidate);
-        return EnchantmentHelper.isEnchantmentCompatible(others, candidate);
+        for (Holder<Enchantment> other : existing.keySet())
+        {
+            if (other.equals(candidate)) continue;
+            if (!EnchantmentHelper.isEnchantmentCompatible(Set.of(other), candidate)) return Optional.of(other);
+        }
+        return Optional.empty();
     }
 
     @Override

@@ -12,14 +12,14 @@ public final class OverhauledEnchantingTableNetworking
     public static void registerCommon()
     {
         PayloadTypeRegistry.clientboundPlay().register(
-            SyncUnlockedEnchantmentsPayload.TYPE,
-            SyncUnlockedEnchantmentsPayload.STREAM_CODEC
+            SyncEnchantmentEntriesPayload.TYPE,
+            SyncEnchantmentEntriesPayload.STREAM_CODEC
         );
     }
 
     public static void registerClient()
     {
-        ClientPlayNetworking.registerGlobalReceiver(SyncUnlockedEnchantmentsPayload.TYPE, (payload, context) ->
+        ClientPlayNetworking.registerGlobalReceiver(SyncEnchantmentEntriesPayload.TYPE, (payload, context) ->
         {
             Minecraft client = context.client();
 
@@ -27,7 +27,7 @@ public final class OverhauledEnchantingTableNetworking
                 && client.player.containerMenu instanceof OverhauledEnchantingMenu menu
                 && menu.containerId == payload.containerId())
             {
-                menu.applySyncedUnlockedEnchantments(payload.unlocked());
+                menu.applySyncedEnchantmentEntries(payload.entries());
             }
         });
     }

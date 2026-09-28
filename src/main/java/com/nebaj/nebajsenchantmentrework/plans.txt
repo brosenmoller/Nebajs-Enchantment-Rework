@@ -49,6 +49,7 @@ ENCHANTMENTS
 - Maxed out Fire Protection prevents all lava and fire damage
 - Make tridents drop more frequently and channeling work always (not only in thunderstorms)
 - Remove Mending
+- Give windburst on Mace the ability to fire out a windburst with right click on a 4 second cooldown.
 
 
 ==============================

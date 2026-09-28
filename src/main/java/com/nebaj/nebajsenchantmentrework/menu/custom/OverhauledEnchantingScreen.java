@@ -115,16 +115,16 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         int top = (this.height - this.imageHeight) / 2;
 
         graphics.blit(
-                RenderPipelines.GUI_TEXTURED,
-                ENCHANTING_TABLE_LOCATION,
-                left,
-                top,
-                0.0F,
-                0.0F,
-                this.imageWidth,
-                this.imageHeight,
-                256,
-                256
+            RenderPipelines.GUI_TEXTURED,
+            ENCHANTING_TABLE_LOCATION,
+            left,
+            top,
+            0.0F,
+            0.0F,
+            this.imageWidth,
+            this.imageHeight,
+            256,
+            256
         );
 
         extractBook(graphics, left, top);
@@ -150,10 +150,13 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
             EnchantmentEntry entry = entries.get(index);
             boolean hovered = isMouseOverOption(mouseX, mouseY, left, top, row);
             boolean enabled = this.menu.canEnchant(entry);
+            boolean isLockedPlaceholder = entry.disabledReason() == OverhauledEnchantingMenu.DisabledReason.LOCKED;
 
             int displayedLevel = Math.max(1, Math.min(entry.currentLevel() + 1, entry.maxLevel()));
-            Component name = Enchantment.getFullname(entry.enchantment(), displayedLevel);
-            String xpText = String.valueOf(entry.xpCost());
+            Component name = isLockedPlaceholder
+                    ? Component.translatable("gui.nebajs-enchantment-rework.unknown_enchantment")
+                    : Enchantment.getFullname(entry.enchantment(), displayedLevel);
+            String xpText = isLockedPlaceholder ? "" : String.valueOf(entry.xpCost());
 
             int textWidth = 86 - this.font.width(xpText);
 
@@ -178,14 +181,21 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
                 }
             }
 
-            String materialCostText = String.valueOf(entry.materialCost());
-            int materialCostColor = enabled ? TEXT_COLOR_MATERIAL_COST_ENABLED : TEXT_COLOR_MATERIAL_COST_DISABLED;
-            int materialCostX = optionX + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.width(materialCostText)) / 2;
-            int materialCostY = optionY + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.lineHeight) / 2;
-            graphics.text(this.font, materialCostText, materialCostX, materialCostY, materialCostColor);
+            if (!isLockedPlaceholder)
+            {
+                String materialCostText = String.valueOf(entry.materialCost());
+                int materialCostColor = enabled ? TEXT_COLOR_MATERIAL_COST_ENABLED : TEXT_COLOR_MATERIAL_COST_DISABLED;
+                int materialCostX = optionX + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.width(materialCostText)) / 2;
+                int materialCostY = optionY + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.lineHeight) / 2;
+                graphics.text(this.font, materialCostText, materialCostX, materialCostY, materialCostColor);
+            }
 
             graphics.textWithWordWrap(this.font, name.copy().withStyle(name.getStyle().withColor(textColor)), optionX + 20, optionY + 2, textWidth, textColor, false);
-            graphics.text(this.font, xpText, optionX + 20 + 86 - this.font.width(xpText), optionY + 9, enabled ? TEXT_COLOR_XP_COST_ENABLED : TEXT_COLOR_XP_COST_DISABLED);
+
+            if (!isLockedPlaceholder)
+            {
+                graphics.text(this.font, xpText, optionX + 20 + 86 - this.font.width(xpText), optionY + 9, enabled ? TEXT_COLOR_XP_COST_ENABLED : TEXT_COLOR_XP_COST_DISABLED);
+            }
         }
 
         renderScrollBar(graphics, left, top, entries.size());
@@ -258,6 +268,18 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         EnchantmentEntry entry = entries.get(index);
         if (!isMouseOverOption(mouseX, mouseY, left, top, row)) return;
 
+        if (entry.disabledReason() == OverhauledEnchantingMenu.DisabledReason.LOCKED)
+        {
+            List<Component> lockedTooltip = Lists.newArrayList();
+            lockedTooltip.add(Component.translatable("gui.nebajs-enchantment-rework.unknown_enchantment").withStyle(ChatFormatting.WHITE));
+            lockedTooltip.add(CommonComponents.EMPTY);
+            lockedTooltip.add(Component.translatable("gui.nebajs-enchantment-rework.locked_treasure_explanation").withStyle(ChatFormatting.GRAY));
+            entry.clueKey().ifPresent(key ->
+                    lockedTooltip.add(Component.translatable(key).withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC)));
+            graphics.setComponentTooltipForNextFrame(this.font, lockedTooltip, mouseX, mouseY);
+            return;
+        }
+
         boolean infinite = this.minecraft.player.hasInfiniteMaterials();
         boolean hasXp = infinite || this.minecraft.player.experienceLevel >= entry.xpCost();
         boolean hasLapis = infinite || this.menu.getLapisCount() >= entry.materialCost();
@@ -269,25 +291,34 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         tooltip.add(Enchantment.getFullname(entry.enchantment(), displayedLevel).copy().withStyle(ChatFormatting.WHITE));
         if (entry.currentLevel() > 0)
         {
-            tooltip.add(Component.literal("Current level: " + entry.currentLevel()).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable("gui.nebajs-enchantment-rework.current_level", entry.currentLevel()).withStyle(ChatFormatting.GRAY));
         }
 
         tooltip.add(CommonComponents.EMPTY);
 
-        MutableComponent experienceComponent = Component.literal(entry.xpCost() + " Experience Level" + (entry.xpCost() == 1 ? "" : "s"));
+        MutableComponent experienceComponent = Component.translatable(
+                entry.xpCost() == 1 ? "container.enchant.level.one" : "container.enchant.level.many", entry.xpCost());
         tooltip.add(experienceComponent.withStyle(hasXp ? ChatFormatting.GRAY : ChatFormatting.RED));
 
-        MutableComponent lapisComponent = Component.literal(entry.materialCost() + " Lapis Lazuli");
+        MutableComponent lapisComponent = Component.translatable(
+                entry.materialCost() == 1 ? "container.enchant.lapis.one" : "container.enchant.lapis.many", entry.materialCost());
         tooltip.add(lapisComponent.withStyle(hasLapis ? ChatFormatting.GRAY : ChatFormatting.RED));
 
-        if (!entry.unlocked())
+        if (entry.requiredBookshelfCount() > 0)
         {
-            tooltip.add(Component.literal("Locked").withStyle(ChatFormatting.RED));
+            boolean hasBookshelves = entry.currentBookshelfCount() >= entry.requiredBookshelfCount();
+            tooltip.add(Component.translatable("gui.nebajs-enchantment-rework.bookshelves_cost",
+                    entry.currentBookshelfCount(), entry.requiredBookshelfCount())
+                .withStyle(hasBookshelves ? ChatFormatting.GRAY : ChatFormatting.RED));
         }
 
-        if (entry.currentLevel() >= entry.maxLevel())
+        switch (entry.disabledReason())
         {
-            tooltip.add(Component.literal("Maximum level").withStyle(ChatFormatting.GRAY));
+            case MAX_LEVEL -> tooltip.add(Component.translatable("gui.nebajs-enchantment-rework.max_level").withStyle(ChatFormatting.RED));
+            case INCOMPATIBLE -> entry.conflictingEnchantment().ifPresent(conflict ->
+                    tooltip.add(Component.translatable("gui.nebajs-enchantment-rework.incompatible_with", conflict.value().description())
+                            .withStyle(ChatFormatting.RED)));
+            case NONE, LOCKED -> { }
         }
 
         graphics.setComponentTooltipForNextFrame(this.font, tooltip, mouseX, mouseY);

@@ -1,3 +1,10 @@
 {
-  "enchantment.nebajs-enchantment-rework.beheading": "Beheading"
+  "enchantment.nebajs-enchantment-rework.beheading": "Beheading",
+  "enchantment.nebajs-enchantment-rework.beheading.clue": "Find me after the end",
+  "gui.nebajs-enchantment-rework.current_level": "Current level: %s",
+  "gui.nebajs-enchantment-rework.unknown_enchantment": "?????",
+  "gui.nebajs-enchantment-rework.locked_treasure_explanation": "Teach enchants with chiseled bookshelves",
+  "gui.nebajs-enchantment-rework.max_level": "Max Level",
+  "gui.nebajs-enchantment-rework.incompatible_with": "Incompatible with %s",
+  "gui.nebajs-enchantment-rework.bookshelves_cost": "Bookshelves: %s/%s"
 }
