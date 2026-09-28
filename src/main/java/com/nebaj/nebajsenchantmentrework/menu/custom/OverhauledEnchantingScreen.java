@@ -31,21 +31,6 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
 {
     private static final Identifier ENCHANTING_TABLE_LOCATION = Identifier.withDefaultNamespace("textures/gui/container/enchanting_table.png");
     private static final Identifier ENCHANTING_BOOK_LOCATION = Identifier.withDefaultNamespace("textures/entity/enchantment/enchanting_table_book.png");
-    private static final Identifier[] ENABLED_LEVEL_SPRITES =
-        new Identifier[]
-            {
-                Identifier.withDefaultNamespace("container/enchanting_table/level_1"),
-                Identifier.withDefaultNamespace("container/enchanting_table/level_2"),
-                Identifier.withDefaultNamespace("container/enchanting_table/level_3")
-            };
-
-    private static final Identifier[] DISABLED_LEVEL_SPRITES =
-        new Identifier[]
-            {
-                Identifier.withDefaultNamespace("container/enchanting_table/level_1_disabled"),
-                Identifier.withDefaultNamespace("container/enchanting_table/level_2_disabled"),
-                Identifier.withDefaultNamespace("container/enchanting_table/level_3_disabled")
-            };
 
     private static final Identifier ENCHANTMENT_SLOT_DISABLED_SPRITE = Identifier.withDefaultNamespace("container/enchanting_table/enchantment_slot_disabled");
     private static final Identifier ENCHANTMENT_SLOT_HIGHLIGHTED_SPRITE = Identifier.withDefaultNamespace("container/enchanting_table/enchantment_slot_highlighted");
@@ -69,7 +54,10 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
     private static final int TEXT_COLOR_HALF_BRIGHTNESS_MASK = 0xFEFEFE;
     private static final int TEXT_COLOR_XP_COST_ENABLED = 0xFF80FF20;
     private static final int TEXT_COLOR_XP_COST_DISABLED = 0xFF407F10;
+    private static final int TEXT_COLOR_MATERIAL_COST_ENABLED = 0xFF40C0FF;
+    private static final int TEXT_COLOR_MATERIAL_COST_DISABLED = 0xFF20607F;
     private static final int SCROLLBAR_TRACK_COLOR = 0xFF555555;
+    private static final int MATERIAL_COST_ICON_BOX_SIZE = 16;
 
     private final RandomSource random = RandomSource.create();
 
@@ -172,7 +160,6 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
             if (!enabled)
             {
                 graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ENCHANTMENT_SLOT_DISABLED_SPRITE, optionX, optionY, OPTION_WIDTH, OPTION_HEIGHT);
-                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, DISABLED_LEVEL_SPRITES[row], optionX + 1, optionY + 1, 16, 16);
                 textColor = ARGB.opaque((textColor & TEXT_COLOR_HALF_BRIGHTNESS_MASK) >> 1);
             }
             else
@@ -187,10 +174,13 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
                 {
                     graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ENCHANTMENT_SLOT_SPRITE, optionX, optionY, OPTION_WIDTH, OPTION_HEIGHT);
                 }
-
-                graphics.blitSprite(RenderPipelines.GUI_TEXTURED, ENABLED_LEVEL_SPRITES[row], optionX + 1, optionY + 1, 16, 16
-                );
             }
+
+            String materialCostText = String.valueOf(entry.materialCost());
+            int materialCostColor = enabled ? TEXT_COLOR_MATERIAL_COST_ENABLED : TEXT_COLOR_MATERIAL_COST_DISABLED;
+            int materialCostX = optionX + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.width(materialCostText)) / 2;
+            int materialCostY = optionY + 1 + (MATERIAL_COST_ICON_BOX_SIZE - this.font.lineHeight) / 2;
+            graphics.text(this.font, materialCostText, materialCostX, materialCostY, materialCostColor);
 
             graphics.textWithWordWrap(this.font, name.copy().withStyle(name.getStyle().withColor(textColor)), optionX + 20, optionY + 2, textWidth, textColor, false);
             graphics.text(this.font, xpText, optionX + 20 + 86 - this.font.width(xpText), optionY + 9, enabled ? TEXT_COLOR_XP_COST_ENABLED : TEXT_COLOR_XP_COST_DISABLED);
