@@ -12,9 +12,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.Blocks;
 
-public class ModEvents {
-    public static void initialize() {
-        UseBlockCallback.EVENT.register((player, level, hand, hitResult) -> {
+public class ModEvents
+{
+    public static void initialize()
+    {
+        UseBlockCallback.EVENT.register((player, level, hand, hitResult) ->
+        {
             BlockPos blockPos = hitResult.getBlockPos();
 
             if (player.isSpectator()) return InteractionResult.PASS;
@@ -23,20 +26,25 @@ public class ModEvents {
 
             if (level.isClientSide()) return InteractionResult.SUCCESS;
 
-            if (player instanceof ServerPlayer serverPlayer) {
-                serverPlayer.openMenu(new ExtendedMenuProvider<BlockPos>() {
+            if (player instanceof ServerPlayer serverPlayer)
+            {
+                serverPlayer.openMenu(new ExtendedMenuProvider<BlockPos>()
+                {
                     @Override
-                    public BlockPos getScreenOpeningData(ServerPlayer serverPlayer) {
+                    public BlockPos getScreenOpeningData(ServerPlayer serverPlayer)
+                    {
                         return blockPos;
                     }
 
                     @Override
-                    public Component getDisplayName() {
+                    public Component getDisplayName()
+                    {
                         return Component.translatable("container.enchant");
                     }
 
                     @Override
-                    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player p) {
+                    public AbstractContainerMenu createMenu(int id, Inventory inventory, Player p)
+                    {
                         return new OverhauledEnchantingMenu(id, inventory, blockPos);
                     }
                 });

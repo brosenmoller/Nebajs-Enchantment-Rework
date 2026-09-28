@@ -2,10 +2,13 @@ package com.nebaj.nebajsenchantmentrework.menu.custom;
 
 import com.nebaj.nebajsenchantmentrework.BookshelfScanner;
 import com.nebaj.nebajsenchantmentrework.menu.ModMenuTypes;
+import com.nebaj.nebajsenchantmentrework.network.SyncUnlockedEnchantmentsPayload;
 import com.nebaj.nebajsenchantmentrework.tags.ModTags;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -41,22 +44,36 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         int xpCost,
         int materialCost,
         boolean unlocked,
-        boolean treasure
-    )
-    {
-    }
+        boolean treasure,
+        int registryId
+    ) { }
+
+    private static final int ENCHANTMENT_SLOT = 36;
+    private static final int LAPIS_SLOT = 37;
+
+    public ItemStack getEnchantItem() { return enchantSlots.getItem(0); }
+    public int getLapisCount() { return enchantSlots.getItem(1).getCount(); }
 
     private static final Identifier EMPTY_SLOT_LAPIS_LAZULI = Identifier.withDefaultNamespace("container/slot/lapis_lazuli");
     private List<EnchantmentEntry> enchantments = new ArrayList<>();
     private final ContainerLevelAccess access;
-    private final Container enchantSlots = new SimpleContainer(2);
-
+    private final Player player;
     private Set<Holder<Enchantment>> unlockedEnchantments = Set.of();
+    private final Container enchantSlots = new SimpleContainer(2)
+    {
+        @Override
+        public void setChanged()
+        {
+            super.setChanged();
+            OverhauledEnchantingMenu.this.slotsChanged(this);
+        }
+    };
 
     public OverhauledEnchantingMenu(int containerId, Inventory inventory, BlockPos pos)
     {
         super(ModMenuTypes.OVERHAULED_ENCHANTING_TABLE_MENU, containerId);
         this.access = ContainerLevelAccess.create(inventory.player.level(), pos);
+        this.player = inventory.player;
 
         addPlayerInventory(inventory);
         addPlayerHotbar(inventory);
@@ -86,10 +103,10 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         });
     }
 
-    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> vanilla)
+    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> vanillaEnchantments)
     {
         return Stream.concat(
-                vanilla.filter(enchantmentHolder ->
+                vanillaEnchantments.filter(enchantmentHolder ->
                         !enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)),
                 unlockedEnchantments.stream()
         );
@@ -105,25 +122,53 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
     {
         if (container != enchantSlots) return;
 
-        ItemStack itemStack = enchantSlots.getItem(0);
-        enchantments.clear();
-        rebuildEnchantments(itemStack);
-        broadcastChanges();
+        boolean isClientSide = access.evaluate((level, pos) -> level.isClientSide(), true);
+
+        if (!isClientSide)
+        {
+            rescanUnlockedEnchantments();
+
+            if (player instanceof ServerPlayer serverPlayer)
+            {
+                ServerPlayNetworking.send(serverPlayer, new SyncUnlockedEnchantmentsPayload(containerId, List.copyOf(unlockedEnchantments)));
+            }
+        }
+
+        enchantments = buildEntries(enchantSlots.getItem(0));
+
+        if (!isClientSide)
+        {
+            broadcastChanges();
+        }
     }
 
-    private void rebuildEnchantments(ItemStack itemStack)
+    public void applySyncedUnlockedEnchantments(List<Holder<Enchantment>> unlocked)
     {
-        rescanUnlockedEnchantments();
+        this.unlockedEnchantments = Set.copyOf(unlocked);
+        this.enchantments = buildEntries(enchantSlots.getItem(0));
+    }
 
-        if (itemStack.isEmpty() || !itemStack.isEnchantable()) return;
+    public List<EnchantmentEntry> getEnchantments()
+    {
+        return enchantments;
+    }
 
-        this.access.execute((level, pos) ->
+    private List<EnchantmentEntry> buildEntries(ItemStack itemStack)
+    {
+        if (itemStack.isEmpty() || !itemStack.isEnchantable()) return List.of();
+
+        return access.evaluate((level, pos) ->
         {
-            int bookcases = BookshelfScanner.countBookShelves(level, pos);
+            RegistryAccess registryAccess = level.registryAccess();
+            Registry<Enchantment> enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
 
-            Stream<Holder<Enchantment>> applicable = getEnchantmentsForItem(level.registryAccess(), itemStack);
-            List<Holder<Enchantment>> pool = filterPool(applicable).toList();
+            Stream<Holder<Enchantment>> applicable = getEnchantmentsForItem(registryAccess, itemStack);
 
+            List<Holder<Enchantment>> pool = filterPool(applicable)
+                    .sorted(Comparator.comparingInt(holder -> enchantmentRegistry.getId(holder.value())))
+                    .toList();
+
+            List<EnchantmentEntry> built = new ArrayList<>(pool.size());
             for (Holder<Enchantment> enchantmentHolder : pool)
             {
                 boolean isTreasure = enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK);
@@ -132,18 +177,21 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 int maxLevel = enchantmentHolder.value().getMaxLevel();
                 int xpCost = 1; // TEMPORARY HARDCODED
                 int materialCost = 1; // TEMPORARY HARDCODED
+                int registryId = enchantmentRegistry.getId(enchantmentHolder.value());
 
-                enchantments.add(new EnchantmentEntry(
+                built.add(new EnchantmentEntry(
                     enchantmentHolder,
                     currentLevel,
                     maxLevel,
                     xpCost,
                     materialCost,
                     unlocked,
-                    isTreasure
+                    isTreasure,
+                    registryId
                 ));
             }
-        });
+            return built;
+        }, List.of());
     }
 
     private Stream<Holder<Enchantment>> getEnchantmentsForItem(RegistryAccess registryAccess, ItemStack itemStack)
@@ -154,30 +202,41 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             .filter(holder -> holder.value().isPrimaryItem(itemStack));
     }
 
+    public boolean canEnchant(EnchantmentEntry entry)
+    {
+        ItemStack itemStack = enchantSlots.getItem(0);
+        ItemStack currency = enchantSlots.getItem(1);
+
+        if (itemStack.isEmpty()) return false;
+        if (!entry.unlocked()) return false;
+        if (entry.currentLevel() >= entry.maxLevel()) return false;
+        if (!isEnchantmentCompatibleWithExistingEnchantments(itemStack, entry.enchantment())) return false;
+
+        if (player.hasInfiniteMaterials()) return true;
+
+        if (player.experienceLevel < entry.xpCost()) return false;
+        if (currency.getCount() < entry.materialCost()) return false;
+
+        return true;
+    }
 
     @Override
     public boolean clickMenuButton(Player player, int buttonId)
     {
-        if (buttonId < 0 || buttonId >= enchantments.size())
+        EnchantmentEntry enchantmentEntry = findEntryByRegistryId(buttonId).orElse(null);
+        if (enchantmentEntry == null)
         {
-            Util.logAndPauseIfInIde(player.getPlainTextName() + " pressed invalid enchantment button id: " + buttonId);
+            Util.logAndPauseIfInIde(player.getPlainTextName() + " pressed invalid or stale enchantment button id: " + buttonId);
             return false;
         }
 
-        EnchantmentEntry enchantmentEntry = enchantments.get(buttonId);
+        boolean isClientSide = access.evaluate((level, pos) -> level.isClientSide(), true);
+        if (isClientSide) return false;
+
+        if (!canEnchant(enchantmentEntry)) return false;
+
         ItemStack itemStack = this.enchantSlots.getItem(0);
         ItemStack currency = this.enchantSlots.getItem(1);
-
-        if (itemStack.isEmpty() || !enchantmentEntry.unlocked() || enchantmentEntry.currentLevel() >= enchantmentEntry.maxLevel()) return false;
-        if (!isEnchantmentCompatibleWithExistingEnchantments(itemStack, enchantmentEntry.enchantment())) return false;
-
-        boolean hasInfiniteMaterials = player.hasInfiniteMaterials();
-
-        if (!hasInfiniteMaterials)
-        {
-            if (player.experienceLevel < enchantmentEntry.xpCost()) return false;
-            if (currency.isEmpty() || currency.getCount() < enchantmentEntry.materialCost()) return false;
-        }
 
         access.execute((level, pos) ->
         {
@@ -199,13 +258,19 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             }
 
             enchantSlots.setChanged();
-            slotsChanged(enchantSlots);
 
             level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS,
                     1.0F, level.getRandom().nextFloat() * 0.1F + 0.9F);
         });
 
         return true;
+    }
+
+    private Optional<EnchantmentEntry> findEntryByRegistryId(int registryId)
+    {
+        return enchantments.stream()
+                .filter(entry -> entry.registryId() == registryId)
+                .findFirst();
     }
 
     private boolean isEnchantmentCompatibleWithExistingEnchantments(ItemStack itemStack, Holder<Enchantment> candidate)

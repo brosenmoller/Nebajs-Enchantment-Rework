@@ -83,10 +83,7 @@ public final class BookshelfScanner
 
         for (int i = 0; i < chiseled.getContainerSize(); i++)
         {
-            if (chiseled.getItem(i).is(Items.ENCHANTED_BOOK))
-            {
-                return true;
-            }
+            if (chiseled.getItem(i).is(Items.ENCHANTED_BOOK)) return true;
         }
         return false;
     }

@@ -18,7 +18,8 @@ public class NebajSEnchantmentReworkDataGenerator implements DataGeneratorEntryp
     }
 
     @Override
-    public void buildRegistry(RegistrySetBuilder registryBuilder) {
+    public void buildRegistry(RegistrySetBuilder registryBuilder)
+    {
         registryBuilder.add(Registries.ENCHANTMENT, EnchantmentGenerator::bootstrap);
     }
 }

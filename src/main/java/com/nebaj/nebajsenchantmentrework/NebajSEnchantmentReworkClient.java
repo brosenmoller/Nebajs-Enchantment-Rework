@@ -9,7 +9,8 @@ import net.minecraft.client.gui.screens.MenuScreens;
 public class NebajSEnchantmentReworkClient implements ClientModInitializer
 {
     @Override
-    public void onInitializeClient(){
+    public void onInitializeClient()
+    {
         MenuScreens.register(ModMenuTypes.OVERHAULED_ENCHANTING_TABLE_MENU, OverhauledEnchantingScreen::new);
         OverhauledEnchantingTableNetworking.registerClient();
     }

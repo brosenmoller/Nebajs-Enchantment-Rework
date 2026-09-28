@@ -39,17 +39,17 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
     public static void bootstrap(BootstrapContext<Enchantment> context)
     {
         register(context, ModEnchantments.BEHEADING,
-                Enchantment.enchantment(
-                        Enchantment.definition(
-                                context.lookup(Registries.ITEM).getOrThrow(ItemTags.SWORDS),
-                                10,
-                                3,
-                                Enchantment.dynamicCost(1, 10),
-                                Enchantment.dynamicCost(1, 15),
-                                3,
-                                EquipmentSlotGroup.HAND
-                        )
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.SWORDS),
+                    10,
+                    3,
+                    Enchantment.dynamicCost(1, 10),
+                    Enchantment.dynamicCost(1, 15),
+                    3,
+                    EquipmentSlotGroup.HAND
                 )
+            )
         );
     }
 }

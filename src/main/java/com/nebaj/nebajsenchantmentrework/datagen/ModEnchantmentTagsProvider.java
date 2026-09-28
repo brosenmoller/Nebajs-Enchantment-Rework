@@ -22,8 +22,8 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
     protected void addTags(HolderLookup.Provider registries)
     {
         builder(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)
-                .add(Enchantments.MENDING)
-                .add(Enchantments.SHARPNESS)
-                .add(ModEnchantments.BEHEADING);
+            .add(Enchantments.MENDING)
+            .add(Enchantments.SHARPNESS)
+            .add(ModEnchantments.BEHEADING);
     }
 }
