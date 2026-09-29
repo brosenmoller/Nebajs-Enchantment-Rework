@@ -1,0 +1,9 @@
+{
+  "levels": [
+    {
+      "material_cost": 5,
+      "xp_cost": 2
+    }
+  ],
+  "order": 100
+}

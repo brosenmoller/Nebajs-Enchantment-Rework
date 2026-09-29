@@ -51,5 +51,19 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                 )
             )
         );
+
+        register(context, ModEnchantments.TEMPERING,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.DURABILITY_ENCHANTABLE),
+                    10,
+                    3,
+                    Enchantment.dynamicCost(1, 10),
+                    Enchantment.dynamicCost(1, 15),
+                    3,
+                    EquipmentSlotGroup.ANY
+                )
+            )
+        );
     }
 }

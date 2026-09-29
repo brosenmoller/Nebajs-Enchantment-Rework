@@ -25,6 +25,9 @@
 			"com.nebaj.nebajsenchantmentrework.NebajSEnchantmentReworkDataGenerator"
 		]
 	},
+	"mixins": [
+		"nebajs-enchantment-rework.mixins.json"
+	],
 	"depends": {
 		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.2",

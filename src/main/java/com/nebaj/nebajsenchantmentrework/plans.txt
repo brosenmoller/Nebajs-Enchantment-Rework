@@ -23,11 +23,11 @@ ENCHANTMENTS
 
 ## New enchantments
 - New enchantments (also given a specific location below): Magma Strider, Crust Walker, Beheading
-- Potential new enchantments (Air Affinity, Crust Walker, Keeping, Preserving)
+- Potential new enchantments (Air Affinity, Crust Walker, Keeping, Tempering)
   * Beheading: (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) (requiring book for enchantment table)
-  * Preserving: Make repair cost less
+  * Tempering: Make repair cost less
   * Keeping: Keep gear on death but lose level of keeping
-  * Maybe add mob Melee Protection (protects from More melee attack from mobs)
+  * Maybe add mob Melee Protection (protects more then normal protection from specically melee attacks)
 
 ## Treasure enchantments and their locations (old and new)
 - Move some normal enchantments to be treasure enchantments and specific locations for enchantments
@@ -56,10 +56,17 @@ ENCHANTMENTS
 XP
 ==============================
 - No xp cost for repairing with an anvil and renaming with an anvil
+- Remove too expensive
 - Let more stuff drop xp (farming, crystal buds, fishing idk)
 - Let all levels take the same amount of time to reach
 - Refund more xp on death and remove 7 level cap
 - Grindstone, refund more xp (or even let you unload onto book, idk yet?)
+
+
+==============================
+Advancements
+==============================
+- Maybe an advancement for teaching an enchant to the enchanting table?
 
 
 ==============================

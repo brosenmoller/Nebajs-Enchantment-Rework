@@ -8,6 +8,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 public final class ModEnchantments
 {
     public static final ResourceKey<Enchantment> BEHEADING = of("beheading");
+    public static final ResourceKey<Enchantment> TEMPERING = of("tempering");
 
     private static ResourceKey<Enchantment> of(String name)
     {

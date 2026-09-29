@@ -23,7 +23,15 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
     {
         builder(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK)
             .add(Enchantments.MENDING)
-            .add(Enchantments.SHARPNESS)
+            .add(Enchantments.DEPTH_STRIDER)
+            .add(Enchantments.AQUA_AFFINITY)
+            .add(Enchantments.LUCK_OF_THE_SEA)
+            .add(Enchantments.FROST_WALKER)
+            .add(Enchantments.SWIFT_SNEAK)
+            .add(Enchantments.WIND_BURST)
+            .add(Enchantments.SOUL_SPEED)
+            .add(Enchantments.MULTISHOT)
+            .add(Enchantments.FLAME)
             .add(ModEnchantments.BEHEADING);
     }
 }

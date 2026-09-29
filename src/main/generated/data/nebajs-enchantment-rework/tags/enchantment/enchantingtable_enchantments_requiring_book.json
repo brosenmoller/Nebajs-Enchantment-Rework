@@ -1,7 +1,15 @@
 {
   "values": [
     "minecraft:mending",
-    "minecraft:sharpness",
+    "minecraft:depth_strider",
+    "minecraft:aqua_affinity",
+    "minecraft:luck_of_the_sea",
+    "minecraft:frost_walker",
+    "minecraft:swift_sneak",
+    "minecraft:wind_burst",
+    "minecraft:soul_speed",
+    "minecraft:multishot",
+    "minecraft:flame",
     "nebajs-enchantment-rework:beheading"
   ]
 }
