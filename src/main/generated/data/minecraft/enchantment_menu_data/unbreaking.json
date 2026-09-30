@@ -10,9 +10,9 @@
       "xp_cost": 10
     },
     {
-      "material_cost": 22,
+      "material_cost": 15,
       "required_bookshelves": 6,
-      "xp_cost": 20
+      "xp_cost": 15
     }
   ],
   "order": 0

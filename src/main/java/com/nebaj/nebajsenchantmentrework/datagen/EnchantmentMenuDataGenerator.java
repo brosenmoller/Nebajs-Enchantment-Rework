@@ -66,7 +66,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         register(Enchantments.UNBREAKING, 0,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
-            new EnchantmentLevelCost(20, 22, 6)
+            new EnchantmentLevelCost(15, 15, 6)
         );
 
         register(ModEnchantments.TEMPERING, 4,
@@ -76,32 +76,33 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         register(Enchantments.EFFICIENCY, 5,
-            new EnchantmentLevelCost(2, 5, 0),
-            new EnchantmentLevelCost(10, 7, 2),
-            new EnchantmentLevelCost(20, 22, 6),
-            new EnchantmentLevelCost(30, 40, 10),
-            new EnchantmentLevelCost(40, 64, 20)
+            new EnchantmentLevelCost(2, 3, 0),
+            new EnchantmentLevelCost(10, 5, 2),
+            new EnchantmentLevelCost(20, 10, 6),
+            new EnchantmentLevelCost(30, 20, 10),
+            new EnchantmentLevelCost(40, 40, 15)
         );
 
         register(Enchantments.SHARPNESS, 10,
-            new EnchantmentLevelCost(1, 1),
-            new EnchantmentLevelCost(2, 1),
-            new EnchantmentLevelCost(3, 1),
-            new EnchantmentLevelCost(4, 2),
-            new EnchantmentLevelCost(5, 2)
+            new EnchantmentLevelCost(2, 3, 0),
+            new EnchantmentLevelCost(10, 5, 2),
+            new EnchantmentLevelCost(20, 10, 6),
+            new EnchantmentLevelCost(30, 20, 10),
+            new EnchantmentLevelCost(40, 40, 15)
         );
 
         register(Enchantments.PROTECTION, 10,
-            new EnchantmentLevelCost(2, 5, 0),
-            new EnchantmentLevelCost(10, 7, 2),
-            new EnchantmentLevelCost(20, 22, 6),
-            new EnchantmentLevelCost(30, 40, 10)
+            new EnchantmentLevelCost(2, 3, 0),
+            new EnchantmentLevelCost(10, 5, 2),
+            new EnchantmentLevelCost(20, 10, 6),
+            new EnchantmentLevelCost(30, 20, 10)
         );
 
         register(Enchantments.AQUA_AFFINITY, UNSORTED_ORDER,
-            new EnchantmentLevelCost(2, 5, 0)
+            new EnchantmentLevelCost(5, 5, 5)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.BANE_OF_ARTHROPODS, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -110,6 +111,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(40, 64, 20)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.BLAST_PROTECTION, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -117,6 +119,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.BREACH, 20,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -124,10 +127,12 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.CHANNELING, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.DENSITY, 10,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -136,12 +141,14 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(40, 64, 20)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.DEPTH_STRIDER, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.FEATHER_FALLING, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -149,11 +156,13 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.FIRE_ASPECT, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.FIRE_PROTECTION, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -162,20 +171,22 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         register(Enchantments.FLAME, UNSORTED_ORDER,
-            new EnchantmentLevelCost(2, 5, 0)
+            new EnchantmentLevelCost(15, 10, 15)
         );
 
         register(Enchantments.FORTUNE, 20,
-            new EnchantmentLevelCost(2, 5, 0),
-            new EnchantmentLevelCost(10, 7, 2),
-            new EnchantmentLevelCost(20, 22, 6)
+            new EnchantmentLevelCost(10, 5, 5),
+            new EnchantmentLevelCost(15, 10, 10),
+            new EnchantmentLevelCost(30, 15, 15)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.FROST_WALKER, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.IMPALING, 10,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -184,49 +195,58 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(40, 64, 20)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.INFINITY, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.KNOCKBACK, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.LOOTING, 30,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.LOYALTY, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.LUCK_OF_THE_SEA, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.LUNGE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.LURE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.MULTISHOT, 30,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.PIERCING, 10,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -234,6 +254,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.POWER, 10,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -242,6 +263,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(40, 64, 20)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.PROJECTILE_PROTECTION, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -249,33 +271,39 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.PUNCH, 20,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.QUICK_CHARGE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.RESPIRATION, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.RIPTIDE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.SILK_TOUCH, 30,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.SMITE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
@@ -284,30 +312,35 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(40, 64, 20)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.SOUL_SPEED, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.SWEEPING_EDGE, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.SWIFT_SNEAK, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.THORNS, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
+        // TODO: still using the default cost ladder, needs balancing
         register(Enchantments.WIND_BURST, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
