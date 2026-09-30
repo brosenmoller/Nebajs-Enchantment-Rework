@@ -49,15 +49,15 @@ public class EnchantmentEntryDataLoader extends SimpleJsonResourceReloadListener
             {
                 NebajSEnchantmentRework.LOGGER.warn(
                     "enchantment_menu_data for {} has {} level entries but max level is {}; costs will clamp",
-                    enchantmentId, config.levels().size(), maxLevel);
+                    enchantmentId, config.levels().size(), maxLevel
+                );
             }
             return config;
         }
 
         if (warnedMissing.add(enchantmentId))
         {
-            NebajSEnchantmentRework.LOGGER.warn(
-                "No enchantment_menu_data entry for {}; using default cost/order", enchantmentId);
+            NebajSEnchantmentRework.LOGGER.warn("No enchantment_menu_data entry for {}; using default cost/order", enchantmentId);
         }
 
         EnchantmentEntryConfig defaultConfig = loaded.get(DEFAULT_ID);

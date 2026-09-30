@@ -1,0 +1,21 @@
+{
+  "clue": "enchantment.nebajs-enchantment-rework.keeping.clue",
+  "levels": [
+    {
+      "material_cost": 5,
+      "required_bookshelves": 5,
+      "xp_cost": 5
+    },
+    {
+      "material_cost": 5,
+      "required_bookshelves": 10,
+      "xp_cost": 5
+    },
+    {
+      "material_cost": 5,
+      "required_bookshelves": 15,
+      "xp_cost": 5
+    }
+  ],
+  "order": 100
+}
