@@ -2,7 +2,6 @@
   "values": [
     "minecraft:mending",
     "minecraft:respiration",
-    "minecraft:aqua_affinity",
     "minecraft:luck_of_the_sea",
     "minecraft:frost_walker",
     "minecraft:depth_strider",
@@ -11,9 +10,11 @@
     "minecraft:soul_speed",
     "minecraft:multishot",
     "minecraft:flame",
+    "minecraft:thorns",
     "nebajs-enchantment-rework:beheading",
     "nebajs-enchantment-rework:keeping",
     "nebajs-enchantment-rework:magma_strider",
-    "nebajs-enchantment-rework:crust_walker"
+    "nebajs-enchantment-rework:crust_walker",
+    "nebajs-enchantment-rework:tempering"
   ]
 }

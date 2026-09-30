@@ -5,6 +5,8 @@
 	"mixins": [
 		"AnvilMenuMixin",
 		"CaveVinesMixin",
+		"EnchantmentHelperMixin",
+		"EnchantRandomlyFunctionMixin",
 		"FishingHookMixin",
 		"GrindstoneResultSlotMixin",
 		"LivingEntityMixin",

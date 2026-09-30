@@ -1,7 +1,8 @@
 // 26.2	-999999999-01-01T00:00:00	Nebaj's Enchantment Rework/Tags for minecraft:enchantment
 634eaf4a85b29549e7b4ab13e080d25ee353b6d4 data/minecraft/tags/enchantment/exclusive_set/armor.json
-a589d4a282f7e7614bf7b6fdcdbd5a4625054e24 data/nebajs-enchantment-rework/tags/enchantment/enchantingtable_enchantments_requiring_book.json
+7589db6b5a92e3d3b27c4dff27ed30ae7e0d440e data/nebajs-enchantment-rework/tags/enchantment/enchantingtable_enchantments_requiring_book.json
 dd24e79ca89aa390d5bfb0ea618095451318446c data/nebajs-enchantment-rework/tags/enchantment/exclusive_set/crust_walker.json
 bd76a6f5f5f224dad8b2318e6e6e92b0e74abb67 data/nebajs-enchantment-rework/tags/enchantment/exclusive_set/keeping.json
 398048c554f813cff7b1576981fd288390a3596a data/nebajs-enchantment-rework/tags/enchantment/exclusive_set/magma_strider.json
 3c39c5be6d18cb8105adca1358412a4ecc8db634 data/nebajs-enchantment-rework/tags/enchantment/exclusive_set/tempering.json
+7097f05588976b25ac63c567c7eeb2e0f3d346ce data/nebajs-enchantment-rework/tags/enchantment/location_restricted.json

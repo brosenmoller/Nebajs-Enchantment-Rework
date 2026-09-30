@@ -69,11 +69,15 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(15, 15, 6)
         );
 
-        register(ModEnchantments.TEMPERING, 4,
-            new EnchantmentLevelCost(5, 10, 5),
-            new EnchantmentLevelCost(40, 15, 10),
-            new EnchantmentLevelCost(80, 25, 15)
-        );
+        register(ModEnchantments.TEMPERING, new EnchantmentEntryConfig(
+            4,
+            List.of(
+                new EnchantmentLevelCost(5, 10, 5),
+                new EnchantmentLevelCost(40, 15, 10),
+                new EnchantmentLevelCost(80, 25, 15)
+            ),
+            Optional.of("enchantment.nebajs-enchantment-rework.tempering.clue")
+        ));
 
         register(Enchantments.EFFICIENCY, 5,
             new EnchantmentLevelCost(2, 3, 0),

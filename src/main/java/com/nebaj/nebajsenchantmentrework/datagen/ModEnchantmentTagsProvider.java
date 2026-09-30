@@ -37,7 +37,26 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
             .add(ModEnchantments.BEHEADING)
             .add(ModEnchantments.KEEPING)
             .add(ModEnchantments.MAGMA_STRIDER)
-            .add(ModEnchantments.CRUST_WALKER);
+            .add(ModEnchantments.CRUST_WALKER)
+            .add(ModEnchantments.TEMPERING);
+
+        builder(ModTags.Enchantments.LOCATION_RESTRICTED)
+            .add(Enchantments.MENDING)
+            .add(Enchantments.RESPIRATION)
+            .add(Enchantments.THORNS)
+            .add(Enchantments.DEPTH_STRIDER)
+            .add(Enchantments.LUCK_OF_THE_SEA)
+            .add(Enchantments.FROST_WALKER)
+            .add(Enchantments.SWIFT_SNEAK)
+            .add(Enchantments.WIND_BURST)
+            .add(Enchantments.SOUL_SPEED)
+            .add(Enchantments.MULTISHOT)
+            .add(Enchantments.FLAME)
+            .add(ModEnchantments.BEHEADING)
+            .add(ModEnchantments.KEEPING)
+            .add(ModEnchantments.MAGMA_STRIDER)
+            .add(ModEnchantments.CRUST_WALKER)
+            .add(ModEnchantments.TEMPERING);
 
         builder(ModTags.Enchantments.TEMPERING_EXCLUSIVE)
             .add(Enchantments.MENDING);

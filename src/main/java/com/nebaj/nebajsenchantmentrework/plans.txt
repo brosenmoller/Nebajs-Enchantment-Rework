@@ -37,19 +37,21 @@ x - New enchantments (also given a specific location below): Magma Strider, Crus
 
 ## Treasure enchantments and their locations (old and new)
 - Move some normal enchantments to be treasure enchantments and specific locations for enchantments
-  * Respiration: Ocean Ruins
-  * Thorns: drop from Elder Guardian
-  * Depth Strider: Buried Treasures
-  * Luck of the Sea: Shipwrecks
-  * Frost Walker: Igloos and Snowy Villages
-  * Swift Sneak and Keeping (new) (not in hardcore): Ancient Cities
-  * Magma Strider (new): Nether Fortresses
-  * Crust Walker (new): Ruined Nether Portals
-  * Wind Burst: Trial Chambers
-  * Soul Speed: Bastions
-  * Beheading (new): End Cities
-  * Multishot: Pillager Outposts
-  * Flame: Nether Fortresses
+  x * Respiration: Ocean Ruins
+  x * Thorns: drop from Elder Guardian
+  x * Depth Strider: Buried Treasures
+  x * Luck of the Sea: Shipwrecks
+  x * Frost Walker: Igloos and Snowy Villages
+  x * Swift Sneak and Keeping (new) (not in hardcore): Ancient Cities
+  x * Magma Strider (new): Nether Fortresses
+  x * Crust Walker (new): Ruined Nether Portals
+  x * Wind Burst: Trial Chambers
+  x * Soul Speed: Bastions
+  x * Beheading (new): End Cities
+  x * Multishot: Pillager Outposts
+  x * Flame: Nether Fortresses
+  x * Mending: End Cities (for now, until it is decided whether to remove it)
+  x * Tempering (new): Villages (armorer, toolsmith and weaponsmith chests)
   * Momentum (new): Bastions
   * Flurry (new): Desert Temples
   * Air Affinity (new): Jungle Temples
@@ -58,7 +60,7 @@ x - New enchantments (also given a specific location below): Magma Strider, Crus
 - Change Bane of Arthropods to also include more stuff and be broader (Maybe rename)
 - Maxed out Fire Protection prevents all lava and fire damage
 - Make tridents drop more frequently and channeling work always (not only in thunderstorms)
-- Remove Mending
+- Remove Mending (undecided; for now it is a treasure enchantment found in End Cities)
 - Give windburst on Mace the ability to fire out a windburst with right-click on a 4-second cooldown.
 - Elytra can be repaired with leather and tridents with prismarine shards
 

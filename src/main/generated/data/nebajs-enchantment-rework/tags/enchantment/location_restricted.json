@@ -1,0 +1,20 @@
+{
+  "values": [
+    "minecraft:mending",
+    "minecraft:respiration",
+    "minecraft:thorns",
+    "minecraft:depth_strider",
+    "minecraft:luck_of_the_sea",
+    "minecraft:frost_walker",
+    "minecraft:swift_sneak",
+    "minecraft:wind_burst",
+    "minecraft:soul_speed",
+    "minecraft:multishot",
+    "minecraft:flame",
+    "nebajs-enchantment-rework:beheading",
+    "nebajs-enchantment-rework:keeping",
+    "nebajs-enchantment-rework:magma_strider",
+    "nebajs-enchantment-rework:crust_walker",
+    "nebajs-enchantment-rework:tempering"
+  ]
+}
