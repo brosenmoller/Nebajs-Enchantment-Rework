@@ -35,7 +35,7 @@ ENCHANTMENTS
   * Aqua Affinity: drop from Elder Guardian
   * Luck of the Sea: Shipwrecks
   * Frost Walker: Igloos and Snowy Villages
-  * Swift Sneak and Keeping: Ancient Cities
+  * Swift Sneak and Keeping (not in hardcore): Ancient Cities
   * Magma Strider (new): Ruined Nether Portals
   * Crust Walker (new): Nether Fortresses
   * Wind Burst: Trial Chambers

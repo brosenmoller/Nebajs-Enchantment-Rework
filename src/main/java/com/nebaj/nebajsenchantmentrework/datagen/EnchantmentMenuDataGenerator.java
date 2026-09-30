@@ -360,6 +360,16 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             ),
             Optional.of("enchantment.nebajs-enchantment-rework.beheading.clue")
         ));
+
+        register(ModEnchantments.KEEPING, new EnchantmentEntryConfig(
+            UNSORTED_ORDER,
+            List.of(
+                new EnchantmentLevelCost(5, 5, 5),
+                new EnchantmentLevelCost(5, 5, 10),
+                new EnchantmentLevelCost(5, 5, 15)
+            ),
+            Optional.of("enchantment.nebajs-enchantment-rework.keeping.clue")
+        ));
     }
 
     @Override

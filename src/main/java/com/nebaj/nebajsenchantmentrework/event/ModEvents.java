@@ -1,6 +1,7 @@
 package com.nebaj.nebajsenchantmentrework.event;
 
 import com.nebaj.nebajsenchantmentrework.menu.custom.OverhauledEnchantingMenu;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.minecraft.core.BlockPos;
@@ -10,7 +11,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.gamerules.GameRules;
 
 public class ModEvents
 {
@@ -51,5 +54,23 @@ public class ModEvents
             }
             return InteractionResult.CONSUME;
         });
+
+        ServerPlayerEvents.COPY_FROM.register(ModEvents::restoreKeepingItems);
+    }
+
+    private static void restoreKeepingItems(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive)
+    {
+        if (alive || oldPlayer.isSpectator()) return;
+        if (newPlayer.level().getGameRules().get(GameRules.KEEP_INVENTORY)) return;
+
+        Inventory oldInventory = oldPlayer.getInventory();
+        Inventory newInventory = newPlayer.getInventory();
+        for (int slot = 0; slot < oldInventory.getContainerSize(); slot++)
+        {
+            ItemStack stack = oldInventory.getItem(slot);
+            if (stack.isEmpty()) continue;
+
+            newInventory.setItem(slot, stack.copy());
+        }
     }
 }

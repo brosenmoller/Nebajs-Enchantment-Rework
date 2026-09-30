@@ -32,6 +32,10 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
             .add(Enchantments.SOUL_SPEED)
             .add(Enchantments.MULTISHOT)
             .add(Enchantments.FLAME)
-            .add(ModEnchantments.BEHEADING);
+            .add(ModEnchantments.BEHEADING)
+            .add(ModEnchantments.KEEPING);
+
+        builder(ModTags.Enchantments.KEEPING_EXCLUSIVE)
+            .add(Enchantments.VANISHING_CURSE);
     }
 }

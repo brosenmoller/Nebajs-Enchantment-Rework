@@ -10,6 +10,7 @@
     "minecraft:soul_speed",
     "minecraft:multishot",
     "minecraft:flame",
-    "nebajs-enchantment-rework:beheading"
+    "nebajs-enchantment-rework:beheading",
+    "nebajs-enchantment-rework:keeping"
   ]
 }

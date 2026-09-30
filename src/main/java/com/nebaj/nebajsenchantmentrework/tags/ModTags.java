@@ -10,6 +10,7 @@ public class ModTags
     public static class Enchantments
     {
         public static final TagKey<Enchantment> ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK = createTag("enchantingtable_enchantments_requiring_book");
+        public static final TagKey<Enchantment> KEEPING_EXCLUSIVE = createTag("exclusive_set/keeping");
 
         private static TagKey<Enchantment> createTag(String name)
         {

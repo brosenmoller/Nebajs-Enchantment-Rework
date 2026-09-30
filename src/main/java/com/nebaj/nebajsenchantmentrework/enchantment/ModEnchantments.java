@@ -9,6 +9,7 @@ public final class ModEnchantments
 {
     public static final ResourceKey<Enchantment> BEHEADING = of("beheading");
     public static final ResourceKey<Enchantment> TEMPERING = of("tempering");
+    public static final ResourceKey<Enchantment> KEEPING = of("keeping");
 
     private static ResourceKey<Enchantment> of(String name)
     {

@@ -1,6 +1,7 @@
 package com.nebaj.nebajsenchantmentrework.datagen;
 
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
+import com.nebaj.nebajsenchantmentrework.tags.ModTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricDynamicRegistryProvider;
 import net.minecraft.core.HolderLookup;
@@ -64,6 +65,21 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                     EquipmentSlotGroup.ANY
                 )
             )
+        );
+
+        register(context, ModEnchantments.KEEPING,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.DURABILITY_ENCHANTABLE),
+                    2,
+                    3,
+                    Enchantment.dynamicCost(1, 10),
+                    Enchantment.dynamicCost(1, 15),
+                    4,
+                    EquipmentSlotGroup.ANY
+                )
+            )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(ModTags.Enchantments.KEEPING_EXCLUSIVE))
         );
     }
 }
