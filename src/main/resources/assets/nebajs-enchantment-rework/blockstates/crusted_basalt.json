@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "age=0": { "model": "nebajs-enchantment-rework:block/crusted_basalt_0" },
+    "age=1": { "model": "nebajs-enchantment-rework:block/crusted_basalt_1" },
+    "age=2": { "model": "nebajs-enchantment-rework:block/crusted_basalt_2" },
+    "age=3": { "model": "nebajs-enchantment-rework:block/crusted_basalt_3" }
+  }
+}

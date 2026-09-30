@@ -11,6 +11,8 @@
     "minecraft:multishot",
     "minecraft:flame",
     "nebajs-enchantment-rework:beheading",
-    "nebajs-enchantment-rework:keeping"
+    "nebajs-enchantment-rework:keeping",
+    "nebajs-enchantment-rework:magma_strider",
+    "nebajs-enchantment-rework:crust_walker"
   ]
 }

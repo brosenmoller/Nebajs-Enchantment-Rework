@@ -27,17 +27,19 @@ ENCHANTMENTS
   * Beheading: (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) (requiring book for enchantment table)
   * Tempering: Make repair cost less
   * Keeping: Keep gear on death but lose level of keeping
-  * Maybe add mob Melee Protection (protects more then normal protection from specically melee attacks)
+  * Magma Strider (For Boots): Improved swimming speed in lava, just like depth strider and mutually exclusive with depth strider
+  * Crust Walker (For Boots): Just like Frost walker, but instead of ice on water in generate basalt on lava when walking over that disappears just like with frost walker, and mutually exclusive with it
+  * Melee Protection (for all armor) (protects more than normal protection from specifically melee attacks (including other players melee attacks))
 
 ## Treasure enchantments and their locations (old and new)
 - Move some normal enchantments to be treasure enchantments and specific locations for enchantments
-  * Depth Strider: Ocean Ruins and Buried Treasures
-  * Aqua Affinity: drop from Elder Guardian
+  * Aqua Affinity: Ocean Ruins and Buried Treasures
+  * Respiration: drop from Elder Guardian
   * Luck of the Sea: Shipwrecks
   * Frost Walker: Igloos and Snowy Villages
   * Swift Sneak and Keeping (not in hardcore): Ancient Cities
-  * Magma Strider (new): Ruined Nether Portals
-  * Crust Walker (new): Nether Fortresses
+  * Magma Strider (new): Nether Fortresses
+  * Crust Walker (new): Ruined Nether Portals
   * Wind Burst: Trial Chambers
   * Soul Speed: Bastions
   * Beheading (new): End Cities
@@ -49,7 +51,15 @@ ENCHANTMENTS
 - Maxed out Fire Protection prevents all lava and fire damage
 - Make tridents drop more frequently and channeling work always (not only in thunderstorms)
 - Remove Mending
-- Give windburst on Mace the ability to fire out a windburst with right click on a 4 second cooldown.
+- Give windburst on Mace the ability to fire out a windburst with right-click on a 4-second cooldown.
+- Elytra can be repaired with leather and tridents with prismarine shards
+
+- Axes can now also get looting, fire aspect, Beheading (I think sharpness is already included)
+- And Tridents can get Sharpness and looting
+- And Maces can get Looting
+
+- Crossbows can now also get infinity and flame
+- Bows can now also get piercing
 
 
 ==============================
@@ -59,8 +69,8 @@ XP
 - Remove too expensive
 - Let more stuff drop xp (farming, crystal buds, fishing idk)
 - Let all levels take the same amount of time to reach
-- Refund more xp on death and remove 7 level cap
-- Grindstone, refund more xp (or even let you unload onto book, idk yet?)
+- Drop 60 percent of xp on death and remove 7 level cap for dropping xp
+- Grindstone, refund more xp
 
 
 ==============================

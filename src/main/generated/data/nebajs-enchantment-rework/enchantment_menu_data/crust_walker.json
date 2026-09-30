@@ -1,0 +1,15 @@
+{
+  "clue": "enchantment.nebajs-enchantment-rework.crust_walker.clue",
+  "levels": [
+    {
+      "material_cost": 5,
+      "xp_cost": 2
+    },
+    {
+      "material_cost": 7,
+      "required_bookshelves": 2,
+      "xp_cost": 10
+    }
+  ],
+  "order": 100
+}

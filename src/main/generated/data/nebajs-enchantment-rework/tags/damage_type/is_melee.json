@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:mob_attack",
+    "minecraft:mob_attack_no_aggro",
+    "minecraft:sting",
+    "minecraft:thorns",
+    "minecraft:player_attack",
+    "minecraft:spear",
+    "minecraft:mace_smash",
+    {
+      "id": "#minecraft:is_player_attack",
+      "required": false
+    }
+  ]
+}

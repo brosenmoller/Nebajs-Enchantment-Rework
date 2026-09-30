@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
@@ -33,9 +34,21 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
             .add(Enchantments.MULTISHOT)
             .add(Enchantments.FLAME)
             .add(ModEnchantments.BEHEADING)
-            .add(ModEnchantments.KEEPING);
+            .add(ModEnchantments.KEEPING)
+            .add(ModEnchantments.MAGMA_STRIDER)
+            .add(ModEnchantments.CRUST_WALKER);
 
         builder(ModTags.Enchantments.KEEPING_EXCLUSIVE)
             .add(Enchantments.VANISHING_CURSE);
+
+        builder(ModTags.Enchantments.MAGMA_STRIDER_EXCLUSIVE)
+            .add(Enchantments.DEPTH_STRIDER)
+            .add(ModEnchantments.CRUST_WALKER);
+
+        builder(ModTags.Enchantments.CRUST_WALKER_EXCLUSIVE)
+            .add(Enchantments.FROST_WALKER);
+
+        builder(EnchantmentTags.ARMOR_EXCLUSIVE)
+            .add(ModEnchantments.MELEE_PROTECTION);
     }
 }

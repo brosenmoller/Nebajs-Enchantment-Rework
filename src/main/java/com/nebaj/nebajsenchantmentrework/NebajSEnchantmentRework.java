@@ -1,5 +1,7 @@
 package com.nebaj.nebajsenchantmentrework;
 
+import com.nebaj.nebajsenchantmentrework.attribute.ModAttributes;
+import com.nebaj.nebajsenchantmentrework.block.ModBlocks;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import com.nebaj.nebajsenchantmentrework.event.ModEvents;
@@ -22,6 +24,8 @@ public class NebajSEnchantmentRework implements ModInitializer
     @Override
     public void onInitialize()
     {
+        ModAttributes.initialize();
+        ModBlocks.initialize();
         ModEnchantments.initialize();
         ModLootTables.initialize();
         ModEvents.initialize();

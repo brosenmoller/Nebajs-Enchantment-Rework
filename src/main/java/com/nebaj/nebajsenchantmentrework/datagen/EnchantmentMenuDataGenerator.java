@@ -370,6 +370,35 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             ),
             Optional.of("enchantment.nebajs-enchantment-rework.keeping.clue")
         ));
+
+        // TODO: still using the default cost ladder, needs balancing
+        register(ModEnchantments.MAGMA_STRIDER, new EnchantmentEntryConfig(
+            UNSORTED_ORDER,
+            List.of(
+                new EnchantmentLevelCost(2, 5, 0),
+                new EnchantmentLevelCost(10, 7, 2),
+                new EnchantmentLevelCost(20, 22, 6)
+            ),
+            Optional.of("enchantment.nebajs-enchantment-rework.magma_strider.clue")
+        ));
+
+        // TODO: still using the default cost ladder, needs balancing
+        register(ModEnchantments.CRUST_WALKER, new EnchantmentEntryConfig(
+            UNSORTED_ORDER,
+            List.of(
+                new EnchantmentLevelCost(2, 5, 0),
+                new EnchantmentLevelCost(10, 7, 2)
+            ),
+            Optional.of("enchantment.nebajs-enchantment-rework.crust_walker.clue")
+        ));
+
+        // TODO: still using the default cost ladder, needs balancing
+        register(ModEnchantments.MELEE_PROTECTION, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2),
+            new EnchantmentLevelCost(20, 22, 6),
+            new EnchantmentLevelCost(30, 40, 10)
+        );
     }
 
     @Override
