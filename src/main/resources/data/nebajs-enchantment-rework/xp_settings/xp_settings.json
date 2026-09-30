@@ -1,0 +1,17 @@
+{
+  "xp_per_level": 20,
+  "death_drop_fraction": 0.5,
+  "grindstone_refund_fraction": 0.5,
+  "fishing_xp": { "type": "minecraft:uniform", "min_inclusive": 3, "max_inclusive": 10 },
+  "berry_harvest_xp": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+  "block_break_xp": {
+    "minecraft:wheat": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:carrots": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:potatoes": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:beetroots": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:nether_wart": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:cocoa": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
+    "minecraft:pitcher_crop": { "type": "minecraft:uniform", "min_inclusive": 1, "max_inclusive": 2 },
+    "minecraft:amethyst_cluster": { "type": "minecraft:uniform", "min_inclusive": 1, "max_inclusive": 3 }
+  }
+}

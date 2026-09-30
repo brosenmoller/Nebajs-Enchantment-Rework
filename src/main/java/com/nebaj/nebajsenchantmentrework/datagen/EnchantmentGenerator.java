@@ -94,6 +94,7 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                     EquipmentSlotGroup.ANY
                 )
             )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(ModTags.Enchantments.TEMPERING_EXCLUSIVE))
         );
 
         register(context, ModEnchantments.KEEPING,

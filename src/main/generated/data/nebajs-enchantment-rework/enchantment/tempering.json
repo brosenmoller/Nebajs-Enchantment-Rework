@@ -3,6 +3,7 @@
   "description": {
     "translate": "enchantment.nebajs-enchantment-rework.tempering"
   },
+  "exclusive_set": "#nebajs-enchantment-rework:exclusive_set/tempering",
   "max_cost": {
     "base": 1,
     "per_level_above_first": 15

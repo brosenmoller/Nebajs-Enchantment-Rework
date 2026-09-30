@@ -56,6 +56,7 @@ public class ModEvents
         });
 
         ServerPlayerEvents.COPY_FROM.register(ModEvents::restoreKeepingItems);
+        XpSourceEvents.initialize();
     }
 
     private static void restoreKeepingItems(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive)

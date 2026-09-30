@@ -11,6 +11,7 @@ public class ModTags
     public static class Enchantments
     {
         public static final TagKey<Enchantment> ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK = createTag("enchantingtable_enchantments_requiring_book");
+        public static final TagKey<Enchantment> TEMPERING_EXCLUSIVE = createTag("exclusive_set/tempering");
         public static final TagKey<Enchantment> KEEPING_EXCLUSIVE = createTag("exclusive_set/keeping");
         public static final TagKey<Enchantment> MAGMA_STRIDER_EXCLUSIVE = createTag("exclusive_set/magma_strider");
         public static final TagKey<Enchantment> CRUST_WALKER_EXCLUSIVE = createTag("exclusive_set/crust_walker");

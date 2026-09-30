@@ -3,15 +3,15 @@ ENCHANTMENT TABLE
 ==============================
 
 ## Learning treasure enchantments
-- Teach treasure enchantments to enchantment table by having them in chiseled bookshelves around enchantment table
-- Let chiseled bookshelves count towards bookshelves for enchantment table if they have at least 1 enchanted book in them
+x - Teach treasure enchantments to enchantment table by having them in chiseled bookshelves around enchantment table
+x - Let chiseled bookshelves count towards bookshelves for enchantment table if they have at least 1 enchanted book in them
 
 ## New UI
-- Enchantment table new UI
-  * Show all possible enchantments (scrollable list where normally options would be) for item (first normal then treasure enchantments (with specific highlight))
-  * You can buy a level of an enchantment for that piece of gear costing xp and a material cost
-  * You always see how much the next level would cost till it maxes out.
-  * Not unlocked treasure enchantments show as ???? and when hovered over it explains that you must place a chiseled bookshelf containing the correct enchanted book to teach this enchantment. And then a cryptic clue as to where to find this one
+x - Enchantment table new UI
+  x * Show all possible enchantments (scrollable list where normally options would be) for item (first normal then treasure enchantments (with specific highlight))
+  x * You can buy a level of an enchantment for that piece of gear costing xp and a material cost
+  x * You always see how much the next level would cost till it maxes out.
+  x * Not unlocked treasure enchantments show as ???? and when hovered over it explains that you must place a chiseled bookshelf containing the correct enchanted book to teach this enchantment. And then a cryptic clue as to where to find this one
 
   * Some way to visually show mutually exclusive enchantments
 - For the different sharpness alternatives and protection alternatives have better hover over explanations
@@ -22,22 +22,27 @@ ENCHANTMENTS
 ==============================
 
 ## New enchantments
-- New enchantments (also given a specific location below): Magma Strider, Crust Walker, Beheading
+x - New enchantments (also given a specific location below): Magma Strider, Crust Walker, Beheading
 - Potential new enchantments (Air Affinity, Crust Walker, Keeping, Tempering)
-  * Beheading: (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) (requiring book for enchantment table)
-  * Tempering: Make repair cost less
-  * Keeping: Keep gear on death but lose level of keeping
-  * Magma Strider (For Boots): Improved swimming speed in lava, just like depth strider and mutually exclusive with depth strider
-  * Crust Walker (For Boots): Just like Frost walker, but instead of ice on water in generate basalt on lava when walking over that disappears just like with frost walker, and mutually exclusive with it
-  * Melee Protection (for all armor) (protects more than normal protection from specifically melee attacks (including other players melee attacks))
+  x * Beheading: (I = 40 percent, II = 60 percent, III = 80 percent chance to let any mob drop head) (requiring book for enchantment table)
+  x * Tempering: Make repair cost less
+  x * Keeping: Keep gear on death but lose level of keeping
+  x * Magma Strider (For Boots): Improved swimming speed in lava, just like depth strider and mutually exclusive with depth strider
+  x * Crust Walker (For Boots): Just like Frost walker, but instead of ice on water in generate basalt on lava when walking over that disappears just like with frost walker, and mutually exclusive with it
+  x * Melee Protection (for all armor) (protects more than normal protection from specifically melee attacks (including other players melee attacks))
+    * Momentum (mutually exclusive with and similar to efficiency), mining speed increases based on amount of times the same block is mined (ignore nbt). Level of enchant decreases build up time by increasing faster in mining speed (5 levels)
+    * Flurry (Weapons) Mutually exclusive to Sharpness, Smite, Bane of Arthropods, Impaling, Density, and Breach. Increases weapon attack speed
+    * Air Affinity (Helmet) Mutually exclusive to Aqua Affinity.. Improves mining speed while your feet are not touching the ground, including while on a mount.
+
 
 ## Treasure enchantments and their locations (old and new)
 - Move some normal enchantments to be treasure enchantments and specific locations for enchantments
-  * Aqua Affinity: Ocean Ruins and Buried Treasures
-  * Respiration: drop from Elder Guardian
+  * Respiration: Ocean Ruins
+  * Thorns: drop from Elder Guardian
+  * Depth Strider: Buried Treasures
   * Luck of the Sea: Shipwrecks
   * Frost Walker: Igloos and Snowy Villages
-  * Swift Sneak and Keeping (not in hardcore): Ancient Cities
+  * Swift Sneak and Keeping (new) (not in hardcore): Ancient Cities
   * Magma Strider (new): Nether Fortresses
   * Crust Walker (new): Ruined Nether Portals
   * Wind Burst: Trial Chambers
@@ -45,6 +50,9 @@ ENCHANTMENTS
   * Beheading (new): End Cities
   * Multishot: Pillager Outposts
   * Flame: Nether Fortresses
+  * Momentum (new): Bastions
+  * Flurry (new): Desert Temples
+  * Air Affinity (new): Jungle Temples
 
 ## Changes to existing enchantments
 - Change Bane of Arthropods to also include more stuff and be broader (Maybe rename)
@@ -65,12 +73,12 @@ ENCHANTMENTS
 ==============================
 XP
 ==============================
-- No xp cost for repairing with an anvil and renaming with an anvil
-- Remove too expensive
-- Let more stuff drop xp (farming, crystal buds, fishing idk)
-- Let all levels take the same amount of time to reach
-- Drop 60 percent of xp on death and remove 7 level cap for dropping xp
-- Grindstone, refund more xp
+x - No xp cost for repairing with an anvil and renaming with an anvil
+x - Remove too expensive
+x - Let more stuff drop xp (farming, crystal buds, fishing idk)
+x - Let all levels take the same amount of time to reach
+x - Drop 60 percent of xp on death and remove 7 level cap for dropping xp
+x - Grindstone, refund more xp
 
 
 ==============================

@@ -4,8 +4,12 @@
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"AnvilMenuMixin",
+		"CaveVinesMixin",
+		"FishingHookMixin",
+		"GrindstoneResultSlotMixin",
 		"LivingEntityMixin",
-		"PlayerMixin"
+		"PlayerMixin",
+		"SweetBerryBushBlockMixin"
 	],
 	"client": [
 		"AnvilScreenMixin"

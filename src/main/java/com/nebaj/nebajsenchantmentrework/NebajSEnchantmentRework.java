@@ -3,6 +3,7 @@ package com.nebaj.nebajsenchantmentrework;
 import com.nebaj.nebajsenchantmentrework.attribute.ModAttributes;
 import com.nebaj.nebajsenchantmentrework.block.ModBlocks;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
+import com.nebaj.nebajsenchantmentrework.data.XpSettingsLoader;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import com.nebaj.nebajsenchantmentrework.event.ModEvents;
 import com.nebaj.nebajsenchantmentrework.loot.ModLootTables;
@@ -34,6 +35,8 @@ public class NebajSEnchantmentRework implements ModInitializer
 
         ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(
             id(EnchantmentEntryDataLoader.FOLDER), EnchantmentEntryDataLoader.INSTANCE);
+        ResourceLoader.get(PackType.SERVER_DATA).registerReloadListener(
+            id(XpSettingsLoader.FOLDER), XpSettingsLoader.INSTANCE);
     }
 
     public static Identifier id(String path)
