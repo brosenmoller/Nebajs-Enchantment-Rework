@@ -11,10 +11,13 @@
     "minecraft:multishot",
     "minecraft:flame",
     "minecraft:thorns",
+    "minecraft:channeling",
+    "minecraft:infinity",
     "nebajs-enchantment-rework:beheading",
     "nebajs-enchantment-rework:keeping",
     "nebajs-enchantment-rework:magma_strider",
     "nebajs-enchantment-rework:crust_walker",
-    "nebajs-enchantment-rework:tempering"
+    "nebajs-enchantment-rework:tempering",
+    "nebajs-enchantment-rework:air_affinity"
   ]
 }

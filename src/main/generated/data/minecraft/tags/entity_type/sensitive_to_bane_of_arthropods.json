@@ -1,0 +1,17 @@
+{
+  "values": [
+    "minecraft:creeper",
+    "minecraft:slime",
+    "minecraft:magma_cube",
+    "minecraft:blaze",
+    "minecraft:breeze",
+    "minecraft:ghast",
+    "minecraft:enderman",
+    "minecraft:hoglin",
+    "minecraft:ravager",
+    "minecraft:vex",
+    "minecraft:shulker",
+    "minecraft:warden",
+    "minecraft:creaking"
+  ]
+}

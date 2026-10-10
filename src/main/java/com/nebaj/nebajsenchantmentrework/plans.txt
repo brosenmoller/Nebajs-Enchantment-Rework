@@ -30,9 +30,10 @@ x - New enchantments (also given a specific location below): Magma Strider, Crus
   x * Magma Strider (For Boots): Improved swimming speed in lava, just like depth strider and mutually exclusive with depth strider
   x * Crust Walker (For Boots): Just like Frost walker, but instead of ice on water in generate basalt on lava when walking over that disappears just like with frost walker, and mutually exclusive with it
   x * Melee Protection (for all armor) (protects more than normal protection from specifically melee attacks (including other players melee attacks))
-    * Momentum (mutually exclusive with and similar to efficiency), mining speed increases based on amount of times the same block is mined (ignore nbt). Level of enchant decreases build up time by increasing faster in mining speed (5 levels)
-    * Flurry (Weapons) Mutually exclusive to Sharpness, Smite, Bane of Arthropods, Impaling, Density, and Breach. Increases weapon attack speed
-    * Air Affinity (Helmet) Mutually exclusive to Aqua Affinity.. Improves mining speed while your feet are not touching the ground, including while on a mount.
+  x * Momentum (mutually exclusive with and similar to efficiency), mining speed increases based on amount of times the same block is mined (ignore nbt). Level of enchant decreases build up time by increasing faster in mining speed (5 levels)
+  x * Flurry (Weapons) Mutually exclusive to Sharpness, Smite, Bane of Arthropods, Impaling, Density, and Breach. Increases weapon attack speed
+  x * Air Affinity (Helmet) Mutually exclusive to Aqua Affinity.. Improves mining speed while your feet are not touching the ground, including while on a mount.
+  x * Surging: Mutually exclusive to Efficiency and Momentum. Starts with extremely high mining speed, but slows down quickly. Mining speed recovers while you are not mining (charge shown in place of the xp bar)
 
 
 ## Treasure enchantments and their locations (old and new)
@@ -52,24 +53,27 @@ x - New enchantments (also given a specific location below): Magma Strider, Crus
   x * Flame: Nether Fortresses
   x * Mending: End Cities (for now, until it is decided whether to remove it)
   x * Tempering (new): Villages (armorer, toolsmith and weaponsmith chests)
-  * Momentum (new): Bastions
-  * Flurry (new): Desert Temples
-  * Air Affinity (new): Jungle Temples
+  x * Momentum (new): Bastions
+  x * Flurry (new): Desert Temples
+  x * Air Affinity (new): Jungle Temples
+  x * Surging (new): Woodland Mansions
+  x * Channeling: Woodland Mansions
+  x * Infinity: Stronghold Libraries
 
 ## Changes to existing enchantments
-- Change Bane of Arthropods to also include more stuff and be broader (Maybe rename)
-- Maxed out Fire Protection prevents all lava and fire damage
-- Make tridents drop more frequently and channeling work always (not only in thunderstorms)
+x - Change Bane of Arthropods to also include more stuff and be broader (Maybe rename)
+x - Maxed out Fire Protection prevents all lava and fire damage
+x - Make tridents drop more frequently and channeling work always (not only in thunderstorms)
 - Remove Mending (undecided; for now it is a treasure enchantment found in End Cities)
-- Give windburst on Mace the ability to fire out a windburst with right-click on a 4-second cooldown.
-- Elytra can be repaired with leather and tridents with prismarine shards
+x - Give windburst on Mace the ability to fire out a windburst with right-click on a 4-second cooldown.
+x - Elytra can be repaired with leather and tridents with prismarine shards
 
-- Axes can now also get looting, fire aspect, Beheading (I think sharpness is already included)
-- And Tridents can get Sharpness and looting
-- And Maces can get Looting
+x - Axes can now also get looting, fire aspect, Beheading (I think sharpness is already included)
+x - And Tridents can get Sharpness and looting
+x - And Maces can get Looting
 
-- Crossbows can now also get infinity and flame
-- Bows can now also get piercing
+x - Crossbows can now also get infinity and flame
+x - Bows can now also get piercing
 
 
 ==============================

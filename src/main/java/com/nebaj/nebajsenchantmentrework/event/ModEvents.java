@@ -57,6 +57,9 @@ public class ModEvents
 
         ServerPlayerEvents.COPY_FROM.register(ModEvents::restoreKeepingItems);
         XpSourceEvents.initialize();
+        MiningSpeedEnchantmentEvents.initialize();
+        FireProtectionEvents.initialize();
+        WindBurstMaceEvents.initialize();
     }
 
     private static void restoreKeepingItems(ServerPlayer oldPlayer, ServerPlayer newPlayer, boolean alive)

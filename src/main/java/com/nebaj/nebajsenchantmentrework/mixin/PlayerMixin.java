@@ -3,6 +3,7 @@ package com.nebaj.nebajsenchantmentrework.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.nebaj.nebajsenchantmentrework.attribute.ModAttributes;
 import com.nebaj.nebajsenchantmentrework.data.XpSettings;
 import com.nebaj.nebajsenchantmentrework.data.XpSettingsLoader;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
@@ -16,6 +17,8 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,5 +62,16 @@ public abstract class PlayerMixin
         XpSettings settings = XpSettingsLoader.INSTANCE.current();
         float totalPoints = (self.experienceLevel + self.experienceProgress) * settings.xpPerLevel();
         return Mth.floor(totalPoints * settings.deathDropFraction());
+    }
+
+    // Vanilla divides by 5 when not on the ground (which includes riding); the divisor becomes 1 / airborne_mining_speed so the default 0.2 keeps vanilla behaviour
+    @ModifyConstant(method = "getDestroySpeed", constant = @Constant(floatValue = 5.0F))
+    private float nebajsenchantmentrework$applyAirborneMiningSpeed(float divisor)
+    {
+        Player self = (Player) (Object) this;
+        float airborneMiningSpeed = (float) self.getAttributeValue(ModAttributes.AIRBORNE_MINING_SPEED);
+        if (airborneMiningSpeed <= 0) return divisor;
+
+        return 1.0F / airborneMiningSpeed;
     }
 }

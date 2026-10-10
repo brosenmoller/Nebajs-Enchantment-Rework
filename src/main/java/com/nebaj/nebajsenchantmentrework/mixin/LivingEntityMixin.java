@@ -24,9 +24,9 @@ public abstract class LivingEntityMixin
     private static final double LAVA_DRAG = 0.5;
 
     @ModifyReturnValue(method = "createLivingAttributes", at = @At("RETURN"))
-    private static AttributeSupplier.Builder nebajsenchantmentrework$addLavaMovementEfficiency(AttributeSupplier.Builder builder)
+    private static AttributeSupplier.Builder nebajsenchantmentrework$addCustomAttributes(AttributeSupplier.Builder builder)
     {
-        return builder.add(ModAttributes.LAVA_MOVEMENT_EFFICIENCY);
+        return builder.add(ModAttributes.LAVA_MOVEMENT_EFFICIENCY).add(ModAttributes.AIRBORNE_MINING_SPEED);
     }
 
     @ModifyArg(method = "travelInLava", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;moveRelative(FLnet/minecraft/world/phys/Vec3;)V"), index = 0)

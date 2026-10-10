@@ -5,16 +5,19 @@
 	"mixins": [
 		"AnvilMenuMixin",
 		"CaveVinesMixin",
+		"DrownedMixin",
 		"EnchantmentHelperMixin",
 		"EnchantRandomlyFunctionMixin",
 		"FishingHookMixin",
 		"GrindstoneResultSlotMixin",
 		"LivingEntityMixin",
 		"PlayerMixin",
+		"ServerPlayerGameModeAccessor",
 		"SweetBerryBushBlockMixin"
 	],
 	"client": [
-		"AnvilScreenMixin"
+		"AnvilScreenMixin",
+		"HudMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1

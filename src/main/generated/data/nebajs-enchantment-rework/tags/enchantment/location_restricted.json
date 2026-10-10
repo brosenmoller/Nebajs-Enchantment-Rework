@@ -3,6 +3,8 @@
     "minecraft:mending",
     "minecraft:respiration",
     "minecraft:thorns",
+    "minecraft:channeling",
+    "minecraft:infinity",
     "minecraft:depth_strider",
     "minecraft:luck_of_the_sea",
     "minecraft:frost_walker",
@@ -15,6 +17,7 @@
     "nebajs-enchantment-rework:keeping",
     "nebajs-enchantment-rework:magma_strider",
     "nebajs-enchantment-rework:crust_walker",
-    "nebajs-enchantment-rework:tempering"
+    "nebajs-enchantment-rework:tempering",
+    "nebajs-enchantment-rework:air_affinity"
   ]
 }

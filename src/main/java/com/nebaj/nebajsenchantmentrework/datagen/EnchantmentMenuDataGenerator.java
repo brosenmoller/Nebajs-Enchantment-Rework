@@ -1,5 +1,6 @@
 package com.nebaj.nebajsenchantmentrework.datagen;
 
+import com.nebaj.nebajsenchantmentrework.NebajSEnchantmentRework;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryConfig;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentLevelCost;
@@ -35,12 +36,20 @@ public class EnchantmentMenuDataGenerator implements DataProvider
 
     private void register(ResourceKey<Enchantment> key, EnchantmentEntryConfig config)
     {
+        if (!ModEnchantments.isEnabled(key)) return;
+
         entries.put(key.identifier(), config);
     }
 
     private void register(ResourceKey<Enchantment> key, int order, EnchantmentLevelCost... levels)
     {
         register(key, new EnchantmentEntryConfig(order, List.of(levels), Optional.empty()));
+    }
+
+    private void registerTreasure(ResourceKey<Enchantment> key, int order, EnchantmentLevelCost... levels)
+    {
+        String clue = "enchantment." + NebajSEnchantmentRework.MOD_ID + "." + key.identifier().getPath() + ".clue";
+        register(key, new EnchantmentEntryConfig(order, List.of(levels), Optional.of(clue)));
     }
 
     private void registerDefault(EnchantmentEntryConfig config)
@@ -69,15 +78,11 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(15, 15, 6)
         );
 
-        register(ModEnchantments.TEMPERING, new EnchantmentEntryConfig(
-            4,
-            List.of(
-                new EnchantmentLevelCost(5, 10, 5),
-                new EnchantmentLevelCost(40, 15, 10),
-                new EnchantmentLevelCost(80, 25, 15)
-            ),
-            Optional.of("enchantment.nebajs-enchantment-rework.tempering.clue")
-        ));
+        registerTreasure(ModEnchantments.TEMPERING, 4,
+            new EnchantmentLevelCost(5, 10, 5),
+            new EnchantmentLevelCost(40, 15, 10),
+            new EnchantmentLevelCost(80, 25, 15)
+        );
 
         register(Enchantments.EFFICIENCY, 5,
             new EnchantmentLevelCost(2, 3, 0),
@@ -132,7 +137,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.CHANNELING, UNSORTED_ORDER,
+        registerTreasure(Enchantments.CHANNELING, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
@@ -146,7 +151,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.DEPTH_STRIDER, UNSORTED_ORDER,
+        registerTreasure(Enchantments.DEPTH_STRIDER, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
@@ -174,7 +179,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 40, 10)
         );
 
-        register(Enchantments.FLAME, UNSORTED_ORDER,
+        registerTreasure(Enchantments.FLAME, UNSORTED_ORDER,
             new EnchantmentLevelCost(15, 10, 15)
         );
 
@@ -185,7 +190,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.FROST_WALKER, UNSORTED_ORDER,
+        registerTreasure(Enchantments.FROST_WALKER, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2)
         );
@@ -200,7 +205,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.INFINITY, UNSORTED_ORDER,
+        registerTreasure(Enchantments.INFINITY, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
@@ -225,7 +230,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.LUCK_OF_THE_SEA, UNSORTED_ORDER,
+        registerTreasure(Enchantments.LUCK_OF_THE_SEA, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
@@ -246,7 +251,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.MULTISHOT, 30,
+        registerTreasure(Enchantments.MULTISHOT, 30,
             new EnchantmentLevelCost(2, 5, 0)
         );
 
@@ -289,7 +294,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.RESPIRATION, UNSORTED_ORDER,
+        registerTreasure(Enchantments.RESPIRATION, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
@@ -317,7 +322,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.SOUL_SPEED, UNSORTED_ORDER,
+        registerTreasure(Enchantments.SOUL_SPEED, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
@@ -331,70 +336,54 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.SWIFT_SNEAK, UNSORTED_ORDER,
+        registerTreasure(Enchantments.SWIFT_SNEAK, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.THORNS, UNSORTED_ORDER,
+        registerTreasure(Enchantments.THORNS, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(Enchantments.WIND_BURST, UNSORTED_ORDER,
+        registerTreasure(Enchantments.WIND_BURST, UNSORTED_ORDER,
             new EnchantmentLevelCost(2, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );
 
-        register(Enchantments.MENDING, UNSORTED_ORDER,
+        registerTreasure(Enchantments.MENDING, UNSORTED_ORDER,
             new EnchantmentLevelCost(45, 50)
         );
 
-        register(ModEnchantments.BEHEADING, new EnchantmentEntryConfig(
-            UNSORTED_ORDER,
-            List.of(
-                new EnchantmentLevelCost(5, 1, 5),
-                new EnchantmentLevelCost(10, 2, 10),
-                new EnchantmentLevelCost(15, 3, 15)
-            ),
-            Optional.of("enchantment.nebajs-enchantment-rework.beheading.clue")
-        ));
+        registerTreasure(ModEnchantments.BEHEADING, UNSORTED_ORDER,
+            new EnchantmentLevelCost(5, 1, 5),
+            new EnchantmentLevelCost(10, 2, 10),
+            new EnchantmentLevelCost(15, 3, 15)
+        );
 
-        register(ModEnchantments.KEEPING, new EnchantmentEntryConfig(
-            UNSORTED_ORDER,
-            List.of(
-                new EnchantmentLevelCost(5, 5, 5),
-                new EnchantmentLevelCost(5, 5, 10),
-                new EnchantmentLevelCost(5, 5, 15)
-            ),
-            Optional.of("enchantment.nebajs-enchantment-rework.keeping.clue")
-        ));
+        registerTreasure(ModEnchantments.KEEPING, UNSORTED_ORDER,
+            new EnchantmentLevelCost(5, 5, 5),
+            new EnchantmentLevelCost(5, 5, 10),
+            new EnchantmentLevelCost(5, 5, 15)
+        );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(ModEnchantments.MAGMA_STRIDER, new EnchantmentEntryConfig(
-            UNSORTED_ORDER,
-            List.of(
-                new EnchantmentLevelCost(2, 5, 0),
-                new EnchantmentLevelCost(10, 7, 2),
-                new EnchantmentLevelCost(20, 22, 6)
-            ),
-            Optional.of("enchantment.nebajs-enchantment-rework.magma_strider.clue")
-        ));
+        registerTreasure(ModEnchantments.MAGMA_STRIDER, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2),
+            new EnchantmentLevelCost(20, 22, 6)
+        );
 
         // TODO: still using the default cost ladder, needs balancing
-        register(ModEnchantments.CRUST_WALKER, new EnchantmentEntryConfig(
-            UNSORTED_ORDER,
-            List.of(
-                new EnchantmentLevelCost(2, 5, 0),
-                new EnchantmentLevelCost(10, 7, 2)
-            ),
-            Optional.of("enchantment.nebajs-enchantment-rework.crust_walker.clue")
-        ));
+        registerTreasure(ModEnchantments.CRUST_WALKER, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2)
+        );
 
         // TODO: still using the default cost ladder, needs balancing
         register(ModEnchantments.MELEE_PROTECTION, UNSORTED_ORDER,
@@ -402,6 +391,36 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6),
             new EnchantmentLevelCost(30, 40, 10)
+        );
+
+        // TODO: still using the default cost ladder, needs balancing
+        registerTreasure(ModEnchantments.MOMENTUM, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2),
+            new EnchantmentLevelCost(20, 22, 6),
+            new EnchantmentLevelCost(30, 40, 10),
+            new EnchantmentLevelCost(40, 64, 20)
+        );
+
+        // TODO: still using the default cost ladder, needs balancing
+        registerTreasure(ModEnchantments.FLURRY, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2),
+            new EnchantmentLevelCost(20, 22, 6),
+            new EnchantmentLevelCost(30, 40, 10),
+            new EnchantmentLevelCost(40, 64, 20)
+        );
+
+        // TODO: still using the default cost ladder, needs balancing
+        registerTreasure(ModEnchantments.AIR_AFFINITY, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0)
+        );
+
+        // TODO: still using the default cost ladder, needs balancing
+        registerTreasure(ModEnchantments.SURGING, UNSORTED_ORDER,
+            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(10, 7, 2),
+            new EnchantmentLevelCost(20, 22, 6)
         );
     }
 

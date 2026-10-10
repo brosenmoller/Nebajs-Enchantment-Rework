@@ -1,0 +1,9 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/sharp_weapon",
+      "required": false
+    },
+    "minecraft:trident"
+  ]
+}

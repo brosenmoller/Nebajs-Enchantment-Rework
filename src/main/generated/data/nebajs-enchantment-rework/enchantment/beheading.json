@@ -15,6 +15,6 @@
   "slots": [
     "hand"
   ],
-  "supported_items": "#minecraft:swords",
+  "supported_items": "#nebajs-enchantment-rework:enchantable/beheading",
   "weight": 10
 }

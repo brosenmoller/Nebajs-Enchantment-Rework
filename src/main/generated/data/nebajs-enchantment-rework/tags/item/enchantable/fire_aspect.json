@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#minecraft:enchantable/fire_aspect",
+      "required": false
+    },
+    {
+      "id": "#minecraft:axes",
+      "required": false
+    }
+  ]
+}

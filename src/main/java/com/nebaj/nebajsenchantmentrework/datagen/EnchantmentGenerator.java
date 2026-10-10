@@ -22,6 +22,7 @@ import net.minecraft.tags.EnchantmentTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.LevelBasedValue;
@@ -63,6 +64,8 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
 
     private static void register(BootstrapContext<Enchantment> context, ResourceKey<Enchantment> key, Enchantment.Builder builder)
     {
+        if (!ModEnchantments.isEnabled(key)) return;
+
         context.register(key, builder.build(key.identifier()));
     }
 
@@ -71,7 +74,7 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
         register(context, ModEnchantments.BEHEADING,
             Enchantment.enchantment(
                 Enchantment.definition(
-                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.SWORDS),
+                    context.lookup(Registries.ITEM).getOrThrow(ModTags.Items.BEHEADING_ENCHANTABLE),
                     10,
                     3,
                     Enchantment.dynamicCost(1, 10),
@@ -210,6 +213,84 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                     DamageSourcePredicate.Builder.damageType()
                         .tag(TagPredicate.is(ModTags.DamageTypes.IS_MELEE))
                         .tag(TagPredicate.isNot(DamageTypeTags.BYPASSES_INVULNERABILITY))
+                )
+            )
+        );
+
+        register(context, ModEnchantments.MOMENTUM,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.MINING_ENCHANTABLE),
+                    2,
+                    5,
+                    Enchantment.dynamicCost(1, 10),
+                    Enchantment.dynamicCost(51, 10),
+                    4,
+                    EquipmentSlotGroup.MAINHAND
+                )
+            )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(ModTags.Enchantments.MINING_SPEED_EXCLUSIVE))
+        );
+
+        register(context, ModEnchantments.SURGING,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.MINING_ENCHANTABLE),
+                    1,
+                    3,
+                    Enchantment.dynamicCost(15, 15),
+                    Enchantment.dynamicCost(65, 15),
+                    8,
+                    EquipmentSlotGroup.MAINHAND
+                )
+            )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(ModTags.Enchantments.MINING_SPEED_EXCLUSIVE))
+        );
+
+        register(context, ModEnchantments.FLURRY,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.WEAPON_ENCHANTABLE),
+                    2,
+                    5,
+                    Enchantment.dynamicCost(5, 8),
+                    Enchantment.dynamicCost(25, 8),
+                    4,
+                    EquipmentSlotGroup.MAINHAND
+                )
+            )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(EnchantmentTags.DAMAGE_EXCLUSIVE))
+            .withEffect(
+                EnchantmentEffectComponents.ATTRIBUTES,
+                new EnchantmentAttributeEffect(
+                    NebajSEnchantmentRework.id("enchantment.flurry"),
+                    Attributes.ATTACK_SPEED,
+                    LevelBasedValue.perLevel(0.08F),
+                    AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+                )
+            )
+        );
+
+        register(context, ModEnchantments.AIR_AFFINITY,
+            Enchantment.enchantment(
+                Enchantment.definition(
+                    context.lookup(Registries.ITEM).getOrThrow(ItemTags.HEAD_ARMOR_ENCHANTABLE),
+                    2,
+                    1,
+                    Enchantment.constantCost(1),
+                    Enchantment.constantCost(41),
+                    4,
+                    EquipmentSlotGroup.HEAD
+                )
+            )
+            .exclusiveWith(context.lookup(Registries.ENCHANTMENT).getOrThrow(ModTags.Enchantments.AIR_AFFINITY_EXCLUSIVE))
+            .withEffect(
+                EnchantmentEffectComponents.ATTRIBUTES,
+                new EnchantmentAttributeEffect(
+                    NebajSEnchantmentRework.id("enchantment.air_affinity"),
+                    ModAttributes.AIRBORNE_MINING_SPEED,
+                    LevelBasedValue.constant(0.8F),
+                    AttributeModifier.Operation.ADD_VALUE
                 )
             )
         );

@@ -15,6 +15,12 @@ public final class ModAttributes
         new RangedAttribute("attribute.name.nebajs-enchantment-rework.lava_movement_efficiency", 0.0, 0.0, 1.0).setSyncable(true)
     );
 
+    public static final Holder<Attribute> AIRBORNE_MINING_SPEED = Registry.registerForHolder(
+        BuiltInRegistries.ATTRIBUTE,
+        NebajSEnchantmentRework.id("airborne_mining_speed"),
+        new RangedAttribute("attribute.name.nebajs-enchantment-rework.airborne_mining_speed", 0.2, 0.0, 1.0).setSyncable(true)
+    );
+
     private ModAttributes() {}
 
     public static void initialize() {}

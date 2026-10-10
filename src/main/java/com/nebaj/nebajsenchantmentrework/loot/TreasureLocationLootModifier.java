@@ -4,7 +4,6 @@ import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
@@ -22,6 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCon
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 public final class TreasureLocationLootModifier
 {
@@ -48,7 +48,13 @@ public final class TreasureLocationLootModifier
         Map.entry(lootTable("chests/village/village_armorer"), new TreasureLocation(0.4F, List.of(ModEnchantments.TEMPERING))),
         Map.entry(lootTable("chests/village/village_toolsmith"), new TreasureLocation(0.5F, List.of(ModEnchantments.TEMPERING))),
         Map.entry(lootTable("chests/village/village_weaponsmith"), new TreasureLocation(0.4F, List.of(ModEnchantments.TEMPERING))),
-        Map.entry(lootTable("chests/pillager_outpost"), new TreasureLocation(0.5F, List.of(Enchantments.MULTISHOT))),
+        Map.entry(lootTable("chests/pillager_outpost"), new TreasureLocation(0.6F, List.of(Enchantments.MULTISHOT))),
+        Map.entry(lootTable("chests/bastion_treasure"), new TreasureLocation(0.4F, List.of(ModEnchantments.MOMENTUM))),
+        Map.entry(lootTable("chests/bastion_other"), new TreasureLocation(0.1F, List.of(ModEnchantments.MOMENTUM))),
+        Map.entry(lootTable("chests/desert_pyramid"), new TreasureLocation(0.4F, List.of(ModEnchantments.FLURRY))),
+        Map.entry(lootTable("chests/jungle_temple"), new TreasureLocation(0.9F, List.of(ModEnchantments.AIR_AFFINITY))),
+        Map.entry(lootTable("chests/woodland_mansion"), new TreasureLocation(0.6F, List.of(ModEnchantments.SURGING, Enchantments.CHANNELING))),
+        Map.entry(lootTable("chests/stronghold_library"), new TreasureLocation(0.4F, List.of(Enchantments.INFINITY))),
         Map.entry(lootTable("entities/elder_guardian"), new TreasureLocation(1.0F, List.of(Enchantments.THORNS), List.of(LootItemKilledByPlayerCondition.killedByPlayer())))
     );
 
@@ -63,17 +69,19 @@ public final class TreasureLocationLootModifier
             TreasureLocation location = LOCATIONS.get(key);
             if (location == null) return;
 
-            tableBuilder.withPool(createTreasureBookPool(location, registries));
+            HolderGetter<Enchantment> enchantmentLookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
+            List<Holder<Enchantment>> enchantments = location.enchantments().stream()
+                .map(enchantmentLookup::get)
+                .<Holder<Enchantment>>flatMap(Optional::stream)
+                .toList();
+            if (enchantments.isEmpty()) return;
+
+            tableBuilder.withPool(createTreasureBookPool(location, enchantments));
         });
     }
 
-    private static LootPool.Builder createTreasureBookPool(TreasureLocation location, HolderLookup.Provider registries)
+    private static LootPool.Builder createTreasureBookPool(TreasureLocation location, List<Holder<Enchantment>> enchantments)
     {
-        HolderGetter<Enchantment> enchantmentLookup = registries.lookupOrThrow(Registries.ENCHANTMENT);
-        List<Holder<Enchantment>> enchantments = location.enchantments().stream()
-            .<Holder<Enchantment>>map(enchantmentLookup::getOrThrow)
-            .toList();
-
         LootPool.Builder pool = LootPool.lootPool()
             .add(LootItem.lootTableItem(Items.BOOK).apply(new EnchantRandomlyFunction.Builder().withOneOf(HolderSet.direct(enchantments))))
             .when(LootItemRandomChanceCondition.randomChance(location.chance()));

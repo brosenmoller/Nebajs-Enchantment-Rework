@@ -6,7 +6,10 @@ import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.tags.TagAppender;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 
@@ -17,6 +20,42 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
     public ModEnchantmentTagsProvider(FabricPackOutput output, CompletableFuture<HolderLookup.Provider> registryLookupFuture)
     {
         super(output, Registries.ENCHANTMENT, registryLookupFuture);
+    }
+
+    @Override
+    protected TagAppender<Enchantment> builder(TagKey<Enchantment> tag)
+    {
+        TagAppender<Enchantment> inner = super.builder(tag);
+        return new TagAppender<>()
+        {
+            @Override
+            public TagAppender<Enchantment> add(ResourceKey<Enchantment> key)
+            {
+                if (ModEnchantments.isEnabled(key)) inner.add(key);
+                return this;
+            }
+
+            @Override
+            public TagAppender<Enchantment> addOptional(ResourceKey<Enchantment> key)
+            {
+                if (ModEnchantments.isEnabled(key)) inner.addOptional(key);
+                return this;
+            }
+
+            @Override
+            public TagAppender<Enchantment> addTag(TagKey<Enchantment> tagKey)
+            {
+                inner.addTag(tagKey);
+                return this;
+            }
+
+            @Override
+            public TagAppender<Enchantment> addOptionalTag(TagKey<Enchantment> tagKey)
+            {
+                inner.addOptionalTag(tagKey);
+                return this;
+            }
+        };
     }
 
     @Override
@@ -34,16 +73,24 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
             .add(Enchantments.MULTISHOT)
             .add(Enchantments.FLAME)
             .add(Enchantments.THORNS)
+            .add(Enchantments.CHANNELING)
+            .add(Enchantments.INFINITY)
             .add(ModEnchantments.BEHEADING)
             .add(ModEnchantments.KEEPING)
             .add(ModEnchantments.MAGMA_STRIDER)
             .add(ModEnchantments.CRUST_WALKER)
-            .add(ModEnchantments.TEMPERING);
+            .add(ModEnchantments.TEMPERING)
+            .add(ModEnchantments.MOMENTUM)
+            .add(ModEnchantments.FLURRY)
+            .add(ModEnchantments.AIR_AFFINITY)
+            .add(ModEnchantments.SURGING);
 
         builder(ModTags.Enchantments.LOCATION_RESTRICTED)
             .add(Enchantments.MENDING)
             .add(Enchantments.RESPIRATION)
             .add(Enchantments.THORNS)
+            .add(Enchantments.CHANNELING)
+            .add(Enchantments.INFINITY)
             .add(Enchantments.DEPTH_STRIDER)
             .add(Enchantments.LUCK_OF_THE_SEA)
             .add(Enchantments.FROST_WALKER)
@@ -56,7 +103,11 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
             .add(ModEnchantments.KEEPING)
             .add(ModEnchantments.MAGMA_STRIDER)
             .add(ModEnchantments.CRUST_WALKER)
-            .add(ModEnchantments.TEMPERING);
+            .add(ModEnchantments.TEMPERING)
+            .add(ModEnchantments.MOMENTUM)
+            .add(ModEnchantments.FLURRY)
+            .add(ModEnchantments.AIR_AFFINITY)
+            .add(ModEnchantments.SURGING);
 
         builder(ModTags.Enchantments.TEMPERING_EXCLUSIVE)
             .add(Enchantments.MENDING);
@@ -73,5 +124,16 @@ public class ModEnchantmentTagsProvider extends FabricTagsProvider<Enchantment>
 
         builder(EnchantmentTags.ARMOR_EXCLUSIVE)
             .add(ModEnchantments.MELEE_PROTECTION);
+
+        builder(ModTags.Enchantments.MINING_SPEED_EXCLUSIVE)
+            .add(Enchantments.EFFICIENCY)
+            .add(ModEnchantments.MOMENTUM)
+            .add(ModEnchantments.SURGING);
+
+        builder(ModTags.Enchantments.AIR_AFFINITY_EXCLUSIVE)
+            .add(Enchantments.AQUA_AFFINITY);
+
+        builder(EnchantmentTags.DAMAGE_EXCLUSIVE)
+            .add(ModEnchantments.FLURRY);
     }
 }
