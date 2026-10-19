@@ -101,9 +101,9 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         registerTreasure(ModEnchantments.TEMPERING, 4,
-            new EnchantmentLevelCost(5, 10, 5),
-            new EnchantmentLevelCost(40, 15, 10),
-            new EnchantmentLevelCost(80, 25, 15)
+            new EnchantmentLevelCost(10, 10, 5),
+            new EnchantmentLevelCost(30, 15, 10),
+            new EnchantmentLevelCost(60, 25, 15)
         );
 
         register(Enchantments.EFFICIENCY, 5,
@@ -346,7 +346,7 @@ public class EnchantmentMenuDataGenerator implements DataProvider
         );
 
         registerTreasure(Enchantments.MENDING, UNSORTED_ORDER, List.of(MaterialRule.repairMaterial(), MaterialRule.FALLBACK),
-            new EnchantmentLevelCost(45, 15)
+            new EnchantmentLevelCost(70, 15)
         );
 
         registerTreasure(ModEnchantments.BEHEADING, UNSORTED_ORDER,
