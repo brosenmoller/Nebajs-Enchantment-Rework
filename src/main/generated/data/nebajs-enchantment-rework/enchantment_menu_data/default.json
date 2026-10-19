@@ -25,5 +25,10 @@
       "xp_cost": 40
     }
   ],
+  "materials": [
+    {
+      "cost": "minecraft:lapis_lazuli"
+    }
+  ],
   "order": 2147483647
 }

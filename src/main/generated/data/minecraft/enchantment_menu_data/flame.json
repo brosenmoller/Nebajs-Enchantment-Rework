@@ -2,9 +2,14 @@
   "clue": "enchantment.nebajs-enchantment-rework.flame.clue",
   "levels": [
     {
-      "material_cost": 10,
+      "material_cost": 15,
       "required_bookshelves": 15,
       "xp_cost": 15
+    }
+  ],
+  "materials": [
+    {
+      "cost": "minecraft:fire_charge"
     }
   ],
   "order": 100

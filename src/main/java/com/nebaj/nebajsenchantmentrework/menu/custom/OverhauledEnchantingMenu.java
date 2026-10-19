@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponents;
@@ -32,8 +33,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -52,45 +53,53 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         INCOMPATIBLE
     }
 
+    public record EntryCost(int xp, int materialCount, HolderSet<Item> material, int currentBookshelves, int requiredBookshelves)
+    {
+        public static final StreamCodec<RegistryFriendlyByteBuf, EntryCost> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VAR_INT, EntryCost::xp,
+            ByteBufCodecs.VAR_INT, EntryCost::materialCount,
+            ByteBufCodecs.holderSet(Registries.ITEM), EntryCost::material,
+            ByteBufCodecs.VAR_INT, EntryCost::currentBookshelves,
+            ByteBufCodecs.VAR_INT, EntryCost::requiredBookshelves,
+            EntryCost::new
+        );
+    }
+
     public record EnchantmentEntry(
         Holder<Enchantment> enchantment,
         int currentLevel,
         int maxLevel,
-        int xpCost,
-        int materialCost,
+        EntryCost cost,
         DisabledReason disabledReason,
         Optional<Holder<Enchantment>> conflictingEnchantment,
         boolean treasure,
         int registryId,
-        Optional<String> clueKey,
-        int currentBookshelfCount,
-        int requiredBookshelfCount
+        Optional<String> clueKey
     )
     {
         public static final StreamCodec<RegistryFriendlyByteBuf, EnchantmentEntry> STREAM_CODEC = StreamCodec.composite(
             Enchantment.STREAM_CODEC, EnchantmentEntry::enchantment,
             ByteBufCodecs.VAR_INT, EnchantmentEntry::currentLevel,
             ByteBufCodecs.VAR_INT, EnchantmentEntry::maxLevel,
-            ByteBufCodecs.VAR_INT, EnchantmentEntry::xpCost,
-            ByteBufCodecs.VAR_INT, EnchantmentEntry::materialCost,
+            EntryCost.STREAM_CODEC, EnchantmentEntry::cost,
             ByteBufCodecs.idMapper(i -> DisabledReason.values()[i], DisabledReason::ordinal), EnchantmentEntry::disabledReason,
             ByteBufCodecs.optional(Enchantment.STREAM_CODEC), EnchantmentEntry::conflictingEnchantment,
             ByteBufCodecs.BOOL, EnchantmentEntry::treasure,
             ByteBufCodecs.VAR_INT, EnchantmentEntry::registryId,
             ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), EnchantmentEntry::clueKey,
-            ByteBufCodecs.VAR_INT, EnchantmentEntry::currentBookshelfCount,
-            ByteBufCodecs.VAR_INT, EnchantmentEntry::requiredBookshelfCount,
             EnchantmentEntry::new
         );
     }
 
     private static final int ENCHANTMENT_SLOT = 36;
-    private static final int LAPIS_SLOT = 37;
+    public static final int MATERIAL_SLOT = 37;
 
     public ItemStack getEnchantItem() { return enchantSlots.getItem(0); }
-    public int getLapisCount() { return enchantSlots.getItem(1).getCount(); }
+    public ItemStack getMaterialStack() { return enchantSlots.getItem(1); }
+    public void setShowLapisGhost(boolean showLapisGhost) { this.showLapisGhost = showLapisGhost; }
 
     private static final Identifier EMPTY_SLOT_LAPIS_LAZULI = Identifier.withDefaultNamespace("container/slot/lapis_lazuli");
+    private boolean showLapisGhost = true;
     private List<EnchantmentEntry> enchantments = new ArrayList<>();
     private final ContainerLevelAccess access;
     private final Player player;
@@ -125,6 +134,11 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             {
                 return 1;
             }
+
+            public boolean mayPlace(final ItemStack itemStack)
+            {
+                return itemStack.has(DataComponents.ENCHANTABLE);
+            }
         });
         this.addSlot(new Slot(this.enchantSlots, 1, 35, 47)
         {
@@ -132,11 +146,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 Objects.requireNonNull(OverhauledEnchantingMenu.this);
             }
 
-            public boolean mayPlace(final ItemStack itemStack)
-            {
-                return itemStack.is(Items.LAPIS_LAZULI);
-            }
-            public Identifier getNoItemIcon() { return EMPTY_SLOT_LAPIS_LAZULI; }
+            public Identifier getNoItemIcon() { return showLapisGhost ? EMPTY_SLOT_LAPIS_LAZULI : null; }
         });
     }
 
@@ -226,24 +236,19 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 Optional<Holder<Enchantment>> conflictingEnchantment = Optional.empty();
                 Optional<String> clueKey = Optional.empty();
                 DisabledReason disabledReason;
-                int xpCost;
-                int materialCost;
-                int requiredBookshelves;
+                EntryCost entryCost;
 
                 if (!unlocked)
                 {
                     disabledReason = DisabledReason.LOCKED;
                     clueKey = config.clue();
-                    xpCost = 0;
-                    materialCost = 0;
-                    requiredBookshelves = 0;
+                    entryCost = new EntryCost(0, 0, HolderSet.empty(), bookshelfCount, 0);
                 }
                 else
                 {
                     EnchantmentLevelCost cost = config.costForLevel(Math.min(currentLevel + 1, maxLevel));
-                    xpCost = cost.xpCost();
-                    materialCost = cost.materialCost();
-                    requiredBookshelves = cost.requiredBookshelves();
+                    HolderSet<Item> material = config.resolveMaterial(itemStack, EnchantmentEntryDataLoader.INSTANCE.getDefault());
+                    entryCost = new EntryCost(cost.xpCost(), cost.materialCost(), material, bookshelfCount, cost.requiredBookshelves());
 
                     if (currentLevel >= maxLevel)
                     {
@@ -260,15 +265,12 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                     enchantmentHolder,
                     currentLevel,
                     maxLevel,
-                    xpCost,
-                    materialCost,
+                    entryCost,
                     disabledReason,
                     conflictingEnchantment,
                     isTreasure,
                     registryId,
-                    clueKey,
-                    bookshelfCount,
-                    requiredBookshelves
+                    clueKey
                 ));
             }
             return built;
@@ -293,9 +295,11 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
 
         if (player.hasInfiniteMaterials()) return true;
 
-        if (player.experienceLevel < entry.xpCost()) return false;
-        if (currency.getCount() < entry.materialCost()) return false;
-        if (entry.currentBookshelfCount() < entry.requiredBookshelfCount()) return false;
+        EntryCost cost = entry.cost();
+        if (player.experienceLevel < cost.xp()) return false;
+        if (!currency.is(cost.material()::contains)) return false;
+        if (currency.getCount() < cost.materialCount()) return false;
+        if (cost.currentBookshelves() < cost.requiredBookshelves()) return false;
 
         return true;
     }
@@ -322,10 +326,10 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         {
             ItemStack item = itemStack;
 
-            player.onEnchantmentPerformed(item, enchantmentEntry.xpCost());
+            player.onEnchantmentPerformed(item, enchantmentEntry.cost().xp());
             item.enchant(enchantmentEntry.enchantment(), enchantmentEntry.currentLevel() + 1);
 
-            currency.consume(enchantmentEntry.materialCost(), player);
+            currency.consume(enchantmentEntry.cost().materialCount(), player);
             if (currency.isEmpty())
             {
                 enchantSlots.setItem(1, ItemStack.EMPTY);
@@ -334,7 +338,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             player.awardStat(Stats.ENCHANT_ITEM);
             if (player instanceof ServerPlayer serverPlayer)
             {
-                CriteriaTriggers.ENCHANTED_ITEM.trigger(serverPlayer, item, enchantmentEntry.xpCost());
+                CriteriaTriggers.ENCHANTED_ITEM.trigger(serverPlayer, item, enchantmentEntry.cost().xp());
             }
 
             enchantSlots.setChanged();

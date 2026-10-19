@@ -2,8 +2,16 @@
   "clue": "enchantment.nebajs-enchantment-rework.mending.clue",
   "levels": [
     {
-      "material_cost": 50,
+      "material_cost": 15,
       "xp_cost": 45
+    }
+  ],
+  "materials": [
+    {
+      "cost": "repair_material"
+    },
+    {
+      "cost": "minecraft:lapis_lazuli"
     }
   ],
   "order": 100

@@ -6,14 +6,19 @@
       "xp_cost": 2
     },
     {
-      "material_cost": 7,
-      "required_bookshelves": 2,
+      "material_cost": 20,
+      "required_bookshelves": 8,
       "xp_cost": 10
     },
     {
-      "material_cost": 22,
-      "required_bookshelves": 6,
+      "material_cost": 40,
+      "required_bookshelves": 20,
       "xp_cost": 20
+    }
+  ],
+  "materials": [
+    {
+      "cost": "minecraft:wind_charge"
     }
   ],
   "order": 100

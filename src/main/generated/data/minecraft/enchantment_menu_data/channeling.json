@@ -2,8 +2,14 @@
   "clue": "enchantment.nebajs-enchantment-rework.channeling.clue",
   "levels": [
     {
-      "material_cost": 5,
-      "xp_cost": 2
+      "material_cost": 50,
+      "required_bookshelves": 20,
+      "xp_cost": 30
+    }
+  ],
+  "materials": [
+    {
+      "cost": "minecraft:copper_ingot"
     }
   ],
   "order": 100

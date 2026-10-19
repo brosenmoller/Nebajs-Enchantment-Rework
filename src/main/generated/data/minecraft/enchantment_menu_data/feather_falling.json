@@ -11,13 +11,18 @@
     },
     {
       "material_cost": 22,
-      "required_bookshelves": 6,
+      "required_bookshelves": 15,
       "xp_cost": 20
     },
     {
       "material_cost": 40,
-      "required_bookshelves": 10,
+      "required_bookshelves": 20,
       "xp_cost": 30
+    }
+  ],
+  "materials": [
+    {
+      "cost": "minecraft:feather"
     }
   ],
   "order": 100

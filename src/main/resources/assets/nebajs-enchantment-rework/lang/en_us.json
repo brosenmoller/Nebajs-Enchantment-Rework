@@ -40,5 +40,6 @@
   "gui.nebajs-enchantment-rework.locked_treasure_explanation": "Teach enchants with chiseled bookshelves",
   "gui.nebajs-enchantment-rework.max_level": "Max Level",
   "gui.nebajs-enchantment-rework.incompatible_with": "Incompatible with %s",
-  "gui.nebajs-enchantment-rework.bookshelves_cost": "Bookshelves: %s/%s"
+  "gui.nebajs-enchantment-rework.bookshelves_cost": "Bookshelves: %s/%s",
+  "gui.nebajs-enchantment-rework.material_cost": "%s %s"
 }

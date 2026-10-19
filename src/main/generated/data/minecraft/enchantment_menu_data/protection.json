@@ -1,23 +1,28 @@
 {
   "levels": [
     {
-      "material_cost": 3,
+      "material_cost": 2,
       "xp_cost": 2
     },
     {
-      "material_cost": 5,
+      "material_cost": 4,
       "required_bookshelves": 2,
       "xp_cost": 10
     },
     {
-      "material_cost": 10,
+      "material_cost": 7,
       "required_bookshelves": 6,
       "xp_cost": 20
     },
     {
-      "material_cost": 20,
+      "material_cost": 12,
       "required_bookshelves": 10,
       "xp_cost": 30
+    }
+  ],
+  "materials": [
+    {
+      "cost": "repair_material"
     }
   ],
   "order": 10

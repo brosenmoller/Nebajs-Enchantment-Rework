@@ -25,5 +25,13 @@
       "xp_cost": 40
     }
   ],
+  "materials": [
+    {
+      "cost": "repair_material"
+    },
+    {
+      "cost": "minecraft:lapis_lazuli"
+    }
+  ],
   "order": 10
 }

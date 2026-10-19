@@ -1,13 +1,14 @@
 {
   "levels": [
     {
-      "material_cost": 5,
-      "xp_cost": 2
+      "material_cost": 8,
+      "required_bookshelves": 10,
+      "xp_cost": 20
     },
     {
-      "material_cost": 7,
-      "required_bookshelves": 2,
-      "xp_cost": 10
+      "material_cost": 18,
+      "required_bookshelves": 20,
+      "xp_cost": 32
     }
   ],
   "order": 20

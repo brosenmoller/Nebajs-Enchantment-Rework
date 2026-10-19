@@ -60,6 +60,11 @@ public class EnchantmentEntryDataLoader extends SimpleJsonResourceReloadListener
             NebajSEnchantmentRework.LOGGER.warn("No enchantment_menu_data entry for {}; using default cost/order", enchantmentId);
         }
 
+        return getDefault();
+    }
+
+    public EnchantmentEntryConfig getDefault()
+    {
         EnchantmentEntryConfig defaultConfig = loaded.get(DEFAULT_ID);
         return defaultConfig != null ? defaultConfig : EnchantmentEntryConfig.FALLBACK;
     }

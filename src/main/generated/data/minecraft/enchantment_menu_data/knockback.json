@@ -2,11 +2,12 @@
   "levels": [
     {
       "material_cost": 5,
+      "required_bookshelves": 4,
       "xp_cost": 2
     },
     {
       "material_cost": 7,
-      "required_bookshelves": 2,
+      "required_bookshelves": 8,
       "xp_cost": 10
     }
   ],
