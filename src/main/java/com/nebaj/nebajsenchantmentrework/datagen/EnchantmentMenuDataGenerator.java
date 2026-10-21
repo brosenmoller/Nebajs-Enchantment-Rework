@@ -96,8 +96,8 @@ public class EnchantmentMenuDataGenerator implements DataProvider
 
         register(Enchantments.UNBREAKING, 0, List.of(MaterialRule.repairMaterial()),
             new EnchantmentLevelCost(2, 5, 0),
-            new EnchantmentLevelCost(10, 7, 2),
-            new EnchantmentLevelCost(15, 12, 6)
+            new EnchantmentLevelCost(10, 7, 6),
+            new EnchantmentLevelCost(15, 12, 12)
         );
 
         registerTreasure(ModEnchantments.TEMPERING, 4,
@@ -129,8 +129,8 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(30, 12, 10)
         );
 
-        register(Enchantments.AQUA_AFFINITY, UNSORTED_ORDER,
-            new EnchantmentLevelCost(5, 5, 5)
+        register(Enchantments.AQUA_AFFINITY, UNSORTED_ORDER, List.of(MaterialRule.fixed(Items.HEART_OF_THE_SEA)),
+            new EnchantmentLevelCost(10, 1, 20)
         );
 
         register(Enchantments.BANE_OF_ARTHROPODS, UNSORTED_ORDER,
@@ -355,14 +355,14 @@ public class EnchantmentMenuDataGenerator implements DataProvider
             new EnchantmentLevelCost(15, 3, 15)
         );
 
-        registerTreasure(ModEnchantments.KEEPING, UNSORTED_ORDER,
+        registerTreasure(ModEnchantments.KEEPING, UNSORTED_ORDER, List.of(MaterialRule.fixed(Items.ECHO_SHARD)),
             new EnchantmentLevelCost(5, 5, 5),
             new EnchantmentLevelCost(5, 5, 10),
             new EnchantmentLevelCost(5, 5, 15)
         );
 
         registerTreasure(ModEnchantments.MAGMA_STRIDER, UNSORTED_ORDER,
-            new EnchantmentLevelCost(2, 5, 0),
+            new EnchantmentLevelCost(5, 5, 0),
             new EnchantmentLevelCost(10, 7, 2),
             new EnchantmentLevelCost(20, 22, 6)
         );

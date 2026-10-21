@@ -1,9 +1,14 @@
 {
   "levels": [
     {
-      "material_cost": 5,
-      "required_bookshelves": 5,
-      "xp_cost": 5
+      "material_cost": 1,
+      "required_bookshelves": 20,
+      "xp_cost": 10
+    }
+  ],
+  "materials": [
+    {
+      "cost": "minecraft:heart_of_the_sea"
     }
   ],
   "order": 100

@@ -3,13 +3,14 @@
 	"id": "nebajs-enchantment-rework",
 	"version": "${version}",
 	"name": "Nebaj's Enchantment Rework",
-	"description": "Simple vanilla friendly enchantment rework",
+	"description": "Vanilla friendly enchantment rework. It replaces the enchanting table interface, moves treasure enchantments to specific structures, adds new enchantments, changes several existing ones, and changes how experience is earned and spent.",
 	"authors": [
 		"Nebaj"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://github.com/brosenmoller/Nebajs-Enchantment-Rework",
+		"sources": "https://github.com/brosenmoller/Nebajs-Enchantment-Rework",
+		"issues": "https://github.com/brosenmoller/Nebajs-Enchantment-Rework/issues"
 	},
 	"license": "MIT-License",
 	"icon": "assets/nebajs-enchantment-rework/icon.png",

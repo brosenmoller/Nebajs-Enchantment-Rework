@@ -17,5 +17,10 @@
       "xp_cost": 5
     }
   ],
+  "materials": [
+    {
+      "cost": "minecraft:echo_shard"
+    }
+  ],
   "order": 100
 }

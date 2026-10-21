@@ -208,7 +208,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         return enchantments;
     }
 
-    private record SortableEnchantment(Holder<Enchantment> holder, boolean treasure, int order) { }
+    private record SortableEnchantment(Holder<Enchantment> holder, boolean treasure, boolean unlocked, int order) { }
 
     private List<EnchantmentEntry> buildEntries(ItemStack itemStack)
     {
@@ -229,9 +229,11 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                         int order = EnchantmentEntryDataLoader.INSTANCE
                                 .getOrFallback(holder.unwrapKey().orElseThrow().identifier(), holder.value().getMaxLevel())
                                 .order();
-                        return new SortableEnchantment(holder, isTreasure, order);
+                        boolean unlocked = !isTreasure || tableConfig.treasureTeaching == TreasureTeaching.ALWAYS || unlockedEnchantments.contains(holder);
+                        return new SortableEnchantment(holder, isTreasure, unlocked, order);
                     })
                     .sorted(Comparator.comparing(SortableEnchantment::treasure)
+                            .thenComparing(SortableEnchantment::unlocked, Comparator.reverseOrder())
                             .thenComparingInt(SortableEnchantment::order)
                             .thenComparingInt(sortable -> enchantmentRegistry.getId(sortable.holder().value())))
                     .toList();
@@ -240,8 +242,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             for (SortableEnchantment sortable : pool)
             {
                 Holder<Enchantment> enchantmentHolder = sortable.holder();
-                boolean isTreasure = sortable.treasure();
-                boolean unlocked = !isTreasure || tableConfig.treasureTeaching == TreasureTeaching.ALWAYS || unlockedEnchantments.contains(enchantmentHolder);
+                boolean unlocked = sortable.unlocked();
                 int currentLevel = EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, itemStack);
                 int maxLevel = enchantmentHolder.value().getMaxLevel();
                 int registryId = enchantmentRegistry.getId(enchantmentHolder.value());
@@ -290,7 +291,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                     entryCost,
                     disabledReason,
                     conflictingEnchantment,
-                    isTreasure,
+                    sortable.treasure(),
                     registryId,
                     clueKey
                 ));

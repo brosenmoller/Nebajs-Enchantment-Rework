@@ -1,4 +1,6 @@
 {
+  "modmenu.summaryTranslation.nebajs-enchantment-rework": "Vanilla friendly enchantment rework.",
+  "modmenu.descriptionTranslation.nebajs-enchantment-rework": "Vanilla friendly enchantment rework. It replaces the enchanting table interface, moves treasure enchantments to specific structures, adds new enchantments, changes several existing ones, and changes how experience is earned and spent.",
   "enchantment.minecraft.bane_of_arthropods": "Bane of Beasts",
   "enchantment.nebajs-enchantment-rework.beheading": "Beheading",
   "enchantment.nebajs-enchantment-rework.beheading.clue": "Find me after the end",

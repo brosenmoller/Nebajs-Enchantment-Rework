@@ -34,7 +34,8 @@ Lapis lazuli is the default material. Some enchantments use a different one:
 | Crust Walker           | Basalt                                                           |
 | Channeling             | Copper ingot                                                     |
 | Thorns                 | Prismarine shard                                                 |
-| Swift Sneak            | Echo shard                                                       |
+| Aqua Affinity          | Heart of the Sea                                                 |
+| Swift Sneak, Keeping   | Echo shard                                                       |
 | Wind Burst             | Wind charge                                                      |
 
 ### Treasure enchantments and chiseled bookshelves

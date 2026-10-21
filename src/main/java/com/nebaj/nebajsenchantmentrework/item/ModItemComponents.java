@@ -5,6 +5,7 @@ import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
@@ -50,6 +51,6 @@ public final class ModItemComponents
 
     private static Repairable repairableWith(Item... items)
     {
-        return new Repairable(HolderSet.direct(Item::builtInRegistryHolder, items));
+        return new Repairable(HolderSet.direct(BuiltInRegistries.ITEM::wrapAsHolder, items));
     }
 }
