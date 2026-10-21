@@ -144,6 +144,14 @@ The mod jar is written to `build/libs`. Other useful tasks:
 - `./gradlew runServer` starts a development server.
 - `./gradlew runDatagen` regenerates the generated data in `src/main/generated`.
 
+## Credits
+
+This mod takes heavy inspiration from [Mallarad's Enchanting Rework](https://modrinth.com/mod/mallarads-enchanting-rework). That project has not been updated for newer Minecraft versions, and there were several things I wanted to do differently, so this mod was written as a separate rework rather than a port.
+
+Inspiration was also taken from [Enchancement](https://modrinth.com/mod/enchancement).
+
+I really appreciate the work that went into both of these mods, and I want to thank their authors for making them.
+
 ## License
 
 MIT, as declared in `fabric.mod.json`.
