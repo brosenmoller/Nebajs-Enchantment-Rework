@@ -157,8 +157,8 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                 DamageImmunity.INSTANCE,
                 DamageSourceCondition.hasDamageSource(
                     DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(DamageTypeTags.BURN_FROM_STEPPING))
-                        .tag(TagPredicate.isNot(DamageTypeTags.BYPASSES_INVULNERABILITY))
+                        .tag(TagPredicate.is(context.lookup(Registries.DAMAGE_TYPE), DamageTypeTags.BURN_FROM_STEPPING))
+                        .tag(TagPredicate.isNot(context.lookup(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_INVULNERABILITY))
                 )
             )
             .withEffect(
@@ -175,7 +175,7 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                             BlockPredicate.unobstructed()
                         )
                     ),
-                    BlockStateProvider.simple(ModBlocks.CRUSTED_BASALT),
+                    BlockStateProvider.holderOf(ModBlocks.CRUSTED_BASALT),
                     Optional.of(GameEvent.BLOCK_PLACE)
                 ),
                 AllOfCondition.allOf(
@@ -211,8 +211,8 @@ public class EnchantmentGenerator extends FabricDynamicRegistryProvider
                 new AddValue(LevelBasedValue.perLevel(2.0F)),
                 DamageSourceCondition.hasDamageSource(
                     DamageSourcePredicate.Builder.damageType()
-                        .tag(TagPredicate.is(ModTags.DamageTypes.IS_MELEE))
-                        .tag(TagPredicate.isNot(DamageTypeTags.BYPASSES_INVULNERABILITY))
+                        .tag(TagPredicate.is(context.lookup(Registries.DAMAGE_TYPE), ModTags.DamageTypes.IS_MELEE))
+                        .tag(TagPredicate.isNot(context.lookup(Registries.DAMAGE_TYPE), DamageTypeTags.BYPASSES_INVULNERABILITY))
                 )
             )
         );

@@ -1,6 +1,5 @@
 package com.nebaj.nebajsenchantmentrework.block;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -22,7 +21,6 @@ import org.jspecify.annotations.Nullable;
 // Lava counterpart of vanilla's FrostedIceBlock, minus its light-level check (lava is always bright enough to pass it)
 public class CrustedBasaltBlock extends Block
 {
-    public static final MapCodec<CrustedBasaltBlock> CODEC = simpleCodec(CrustedBasaltBlock::new);
     public static final int MAX_AGE = 3;
     public static final IntegerProperty AGE = BlockStateProperties.AGE_3;
     private static final int NEIGHBORS_TO_AGE = 4;
@@ -32,12 +30,6 @@ public class CrustedBasaltBlock extends Block
     {
         super(properties);
         registerDefaultState(stateDefinition.any().setValue(AGE, 0));
-    }
-
-    @Override
-    public MapCodec<CrustedBasaltBlock> codec()
-    {
-        return CODEC;
     }
 
     @Override

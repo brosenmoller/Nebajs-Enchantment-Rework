@@ -1,10 +1,10 @@
 # Nebaj's Enchantment Rework
 
-A Fabric mod for Minecraft 26.2 that reworks the enchanting system. It replaces the enchanting table interface, moves treasure enchantments to specific structures, adds new enchantments, changes several existing ones, and changes how experience is earned and spent.
+A Fabric mod for Minecraft 26.3 that reworks the enchanting system. It replaces the enchanting table interface, moves treasure enchantments to specific structures, adds new enchantments, changes several existing ones, and changes how experience is earned and spent.
 
 ## Requirements
 
-- Minecraft 26.2
+- Minecraft 26.3
 - Fabric Loader 0.19.5 or newer
 - Fabric API
 - Java 25
