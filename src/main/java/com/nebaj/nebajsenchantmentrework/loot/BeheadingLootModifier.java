@@ -1,5 +1,8 @@
 package com.nebaj.nebajsenchantmentrework.loot;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.core.registries.Registries;
@@ -42,6 +45,7 @@ public final class BeheadingLootModifier
         LootTableEvents.MODIFY.register((key, tableBuilder, source, registries) ->
         {
             if (!source.isBuiltin()) return;
+            if (DisabledEnchantments.isDisabled(ModEnchantments.BEHEADING)) return;
 
             if (ZOMBIE_LOOT_TABLE.equals(key)) addBeheadingPool(tableBuilder, Items.ZOMBIE_HEAD, registries);
             else if (SKELETON_LOOT_TABLE.equals(key)) addBeheadingPool(tableBuilder, Items.SKELETON_SKULL, registries);
@@ -58,13 +62,14 @@ public final class BeheadingLootModifier
             net.minecraft.core.HolderLookup.Provider registries
     )
     {
+        ModConfig.EnchantmentBehaviour behaviour = ModConfigManager.current().enchantmentBehaviour;
         LootPool.Builder pool = LootPool.lootPool()
             .add(LootItem.lootTableItem(head))
             .when(LootItemKilledByPlayerCondition.killedByPlayer())
             .when(
                 new LootItemRandomChanceWithEnchantedBonusCondition(
                     0.0F,
-                    new LevelBasedValue.Linear(0.40F, 0.20F),
+                    new LevelBasedValue.Linear(behaviour.beheadingBaseChancePercent / 100.0F, behaviour.beheadingChancePerLevelPercent / 100.0F),
                     registries.lookupOrThrow(Registries.ENCHANTMENT).getOrThrow(ModEnchantments.BEHEADING)
                 )
             );

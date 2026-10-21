@@ -1,9 +1,13 @@
 package com.nebaj.nebajsenchantmentrework.menu.custom;
 
 import com.nebaj.nebajsenchantmentrework.BookshelfScanner;
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.config.TreasureTeaching;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryConfig;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentLevelCost;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.menu.ModMenuTypes;
 import com.nebaj.nebajsenchantmentrework.network.SyncEnchantmentEntriesPayload;
 import com.nebaj.nebajsenchantmentrework.tags.ModTags;
@@ -63,6 +67,12 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             ByteBufCodecs.VAR_INT, EntryCost::requiredBookshelves,
             EntryCost::new
         );
+
+        // The material slot holds a single stack, so a cost is capped at whatever stack size the offered item has
+        public int materialCountFor(ItemStack materialStack)
+        {
+            return Math.min(materialCount, materialStack.getMaxStackSize());
+        }
     }
 
     public record EnchantmentEntry(
@@ -150,9 +160,14 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         });
     }
 
-    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> applicable)
+    private Stream<Holder<Enchantment>> filterPool(Stream<Holder<Enchantment>> applicable, TreasureTeaching treasureTeaching)
     {
-        return applicable.filter(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
+        Stream<Holder<Enchantment>> pool = applicable.filter(enchantmentHolder -> !enchantmentHolder.is(EnchantmentTags.CURSE));
+        if (treasureTeaching == TreasureTeaching.VANILLA)
+        {
+            pool = pool.filter(enchantmentHolder -> !enchantmentHolder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK));
+        }
+        return DisabledEnchantments.withoutDisabled(pool);
     }
 
     private void rescanUnlockedEnchantments()
@@ -202,11 +217,12 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
         return access.evaluate((level, pos) ->
         {
             RegistryAccess registryAccess = level.registryAccess();
+            ModConfig.EnchantingTable tableConfig = ModConfigManager.current().enchantingTable;
             Registry<Enchantment> enchantmentRegistry = registryAccess.lookupOrThrow(Registries.ENCHANTMENT);
 
             Stream<Holder<Enchantment>> applicable = getEnchantmentsForItem(registryAccess, itemStack);
 
-            List<SortableEnchantment> pool = filterPool(applicable)
+            List<SortableEnchantment> pool = filterPool(applicable, tableConfig.treasureTeaching)
                     .map(holder ->
                     {
                         boolean isTreasure = holder.is(ModTags.Enchantments.ENCHANTINGTABLE_ENCHANTMENTS_REQUIRING_BOOK);
@@ -225,7 +241,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             {
                 Holder<Enchantment> enchantmentHolder = sortable.holder();
                 boolean isTreasure = sortable.treasure();
-                boolean unlocked = !isTreasure || unlockedEnchantments.contains(enchantmentHolder);
+                boolean unlocked = !isTreasure || tableConfig.treasureTeaching == TreasureTeaching.ALWAYS || unlockedEnchantments.contains(enchantmentHolder);
                 int currentLevel = EnchantmentHelper.getItemEnchantmentLevel(enchantmentHolder, itemStack);
                 int maxLevel = enchantmentHolder.value().getMaxLevel();
                 int registryId = enchantmentRegistry.getId(enchantmentHolder.value());
@@ -248,7 +264,13 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
                 {
                     EnchantmentLevelCost cost = config.costForLevel(Math.min(currentLevel + 1, maxLevel));
                     HolderSet<Item> material = config.resolveMaterial(itemStack, EnchantmentEntryDataLoader.INSTANCE.getDefault());
-                    entryCost = new EntryCost(cost.xpCost(), cost.materialCost(), material, bookshelfCount, cost.requiredBookshelves());
+                    entryCost = new EntryCost(
+                        tableConfig.xpCostPreset.apply(cost.xpCost()),
+                        tableConfig.materialCostPreset.apply(cost.materialCost()),
+                        material,
+                        bookshelfCount,
+                        cost.requiredBookshelves()
+                    );
 
                     if (currentLevel >= maxLevel)
                     {
@@ -292,16 +314,16 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
 
         if (itemStack.isEmpty()) return false;
         if (entry.disabledReason() != DisabledReason.NONE) return false;
+        if (DisabledEnchantments.isDisabled(entry.enchantment())) return false;
 
         if (player.hasInfiniteMaterials()) return true;
 
         EntryCost cost = entry.cost();
         if (player.experienceLevel < cost.xp()) return false;
-        if (!currency.is(cost.material()::contains)) return false;
-        if (currency.getCount() < cost.materialCount()) return false;
         if (cost.currentBookshelves() < cost.requiredBookshelves()) return false;
+        if (cost.materialCount() <= 0) return true;
 
-        return true;
+        return currency.is(cost.material()::contains) && currency.getCount() >= cost.materialCountFor(currency);
     }
 
     @Override
@@ -329,7 +351,7 @@ public class OverhauledEnchantingMenu extends AbstractContainerMenu
             player.onEnchantmentPerformed(item, enchantmentEntry.cost().xp());
             item.enchant(enchantmentEntry.enchantment(), enchantmentEntry.currentLevel() + 1);
 
-            currency.consume(enchantmentEntry.cost().materialCount(), player);
+            currency.consume(enchantmentEntry.cost().materialCountFor(currency), player);
             if (currency.isEmpty())
             {
                 enchantSlots.setItem(1, ItemStack.EMPTY);

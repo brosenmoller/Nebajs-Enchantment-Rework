@@ -1,5 +1,8 @@
 package com.nebaj.nebajsenchantmentrework.loot;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.core.Holder;
@@ -66,6 +69,9 @@ public final class TreasureLocationLootModifier
         {
             if (!source.isBuiltin()) return;
 
+            ModConfig.TreasureLoot treasureLoot = ModConfigManager.current().treasureLoot;
+            if (!treasureLoot.addTreasureBooks) return;
+
             TreasureLocation location = LOCATIONS.get(key);
             if (location == null) return;
 
@@ -73,18 +79,20 @@ public final class TreasureLocationLootModifier
             List<Holder<Enchantment>> enchantments = location.enchantments().stream()
                 .map(enchantmentLookup::get)
                 .<Holder<Enchantment>>flatMap(Optional::stream)
+                .filter(holder -> !DisabledEnchantments.isDisabled(holder))
                 .toList();
             if (enchantments.isEmpty()) return;
 
-            tableBuilder.withPool(createTreasureBookPool(location, enchantments));
+            float chance = Math.min(1.0F, location.chance() * treasureLoot.bookChanceMultiplierPercent / 100.0F);
+            tableBuilder.withPool(createTreasureBookPool(location, chance, enchantments));
         });
     }
 
-    private static LootPool.Builder createTreasureBookPool(TreasureLocation location, List<Holder<Enchantment>> enchantments)
+    private static LootPool.Builder createTreasureBookPool(TreasureLocation location, float chance, List<Holder<Enchantment>> enchantments)
     {
         LootPool.Builder pool = LootPool.lootPool()
             .add(LootItem.lootTableItem(Items.BOOK).apply(new EnchantRandomlyFunction.Builder().withOneOf(HolderSet.direct(enchantments))))
-            .when(LootItemRandomChanceCondition.randomChance(location.chance()));
+            .when(LootItemRandomChanceCondition.randomChance(chance));
 
         for (LootItemCondition.Builder condition : location.extraConditions())
         {

@@ -40,13 +40,5 @@ public class ModItemTagsProvider extends FabricTagsProvider.ItemTagsProvider
         builder(ModTags.Items.BOW_OR_CROSSBOW_ENCHANTABLE)
             .addOptionalTag(ItemTags.BOW_ENCHANTABLE)
             .addOptionalTag(ItemTags.CROSSBOW_ENCHANTABLE);
-
-        builder(ItemTags.NETHERITE_TOOL_MATERIALS)
-            .setReplace(true)
-            .add(ItemIds.DIAMOND);
-
-        builder(ItemTags.REPAIRS_NETHERITE_ARMOR)
-            .setReplace(true)
-            .add(ItemIds.DIAMOND);
     }
 }

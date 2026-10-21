@@ -1,5 +1,8 @@
 package com.nebaj.nebajsenchantmentrework.mixin;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
@@ -46,7 +49,7 @@ import java.util.OptionalInt;
 public abstract class AnvilMenuMixin extends ItemCombinerMenu
 {
     @Unique
-    private static final float ANVIL_DAMAGE_CHANCE = 0.12F;
+    private static final int TOO_EXPENSIVE_COST = 40;
 
     @Shadow
     @Final
@@ -123,7 +126,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu
         BlockState state = level.getBlockState(pos);
         boolean shouldDamage = !player.hasInfiniteMaterials()
             && state.is(BlockTags.ANVIL)
-            && player.getRandom().nextFloat() < ANVIL_DAMAGE_CHANCE;
+            && player.getRandom().nextFloat() < ModConfigManager.current().anvil.damageChancePercent / 100.0F;
 
         if (!shouldDamage)
         {
@@ -179,6 +182,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu
             enchantPrice = combinePrice.getAsInt();
         }
 
+        ModConfig.Anvil anvil = ModConfigManager.current().anvil;
         boolean renamed = nebajsenchantmentrework$applyRename(input, result);
         boolean repaired = result.getDamageValue() != input.getDamageValue();
         boolean enchanted = enchantPrice > 0;
@@ -189,12 +193,35 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu
             return;
         }
 
-        onlyRenaming = !enchanted && !repaired;
-        cost.set(enchanted ? (int) Mth.clamp(priorWorkTax + enchantPrice, 1L, Integer.MAX_VALUE) : 0);
+        int servicePrice = anvil.freeRepairsAndRenames ? 0 : nebajsenchantmentrework$vanillaServicePrice(repaired, renamed);
+        boolean charged = enchanted || servicePrice > 0;
 
-        nebajsenchantmentrework$finalizeResult(result, addition, enchantments, enchanted);
+        onlyRenaming = !enchanted && !repaired;
+        cost.set(charged ? (int) Mth.clamp(priorWorkTax + enchantPrice + servicePrice, 1L, Integer.MAX_VALUE) : 0);
+
+        if (!anvil.removeTooExpensiveCap && cost.get() >= TOO_EXPENSIVE_COST && !player.hasInfiniteMaterials())
+        {
+            if (!onlyRenaming)
+            {
+                resultSlots.setItem(0, ItemStack.EMPTY);
+                broadcastChanges();
+                return;
+            }
+            cost.set(TOO_EXPENSIVE_COST - 1);
+        }
+
+        nebajsenchantmentrework$finalizeResult(result, addition, enchantments, enchanted || (servicePrice > 0 && repaired));
         resultSlots.setItem(0, result);
         broadcastChanges();
+    }
+
+    // Vanilla charges a level per material used (2 for combining two items) and one more for a rename
+    @Unique
+    private int nebajsenchantmentrework$vanillaServicePrice(boolean repaired, boolean renamed)
+    {
+        int price = renamed ? 1 : 0;
+        if (repaired) price += repairItemCountCost > 0 ? repairItemCountCost : 2;
+        return price;
     }
 
     @Unique
@@ -247,6 +274,11 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu
         {
             Holder<Enchantment> enchantmentHolder = entry.getKey();
             Enchantment enchantment = enchantmentHolder.value();
+            if (DisabledEnchantments.isDisabled(enchantmentHolder))
+            {
+                anyIncompatible = true;
+                continue;
+            }
 
             int conflicts = nebajsenchantmentrework$countConflicts(enchantmentHolder, enchantments);
             price += conflicts;
@@ -277,7 +309,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu
     {
         int inputDurability = input.getMaxDamage() - input.getDamageValue();
         int additionDurability = addition.getMaxDamage() - addition.getDamageValue();
-        int bonusDurability = result.getMaxDamage() * 12 / 100;
+        int bonusDurability = result.getMaxDamage() * ModConfigManager.current().anvil.combineBonusDurabilityPercent / 100;
         int resultDamage = Math.max(0, result.getMaxDamage() - (inputDurability + additionDurability + bonusDurability));
 
         if (resultDamage < result.getDamageValue()) result.setDamageValue(resultDamage);

@@ -6,7 +6,6 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.level.Level;
 
 import java.util.Map;
 
@@ -17,7 +16,6 @@ public class XpSettingsLoader extends SimpleJsonResourceReloadListener<XpSetting
     public static final XpSettingsLoader INSTANCE = new XpSettingsLoader();
 
     private XpSettings current = XpSettings.FALLBACK;
-    private int clientXpPerLevel = XpSettings.FALLBACK.xpPerLevel();
 
     private XpSettingsLoader()
     {
@@ -46,16 +44,5 @@ public class XpSettingsLoader extends SimpleJsonResourceReloadListener<XpSetting
     public XpSettings current()
     {
         return current;
-    }
-
-    // The client renders the XP bar from getXpNeededForNextLevel too, so it needs the server's value (synced via SyncXpSettingsPayload)
-    public int xpPerLevel(Level level)
-    {
-        return level.isClientSide() ? clientXpPerLevel : current.xpPerLevel();
-    }
-
-    public void setClientXpPerLevel(int xpPerLevel)
-    {
-        this.clientXpPerLevel = xpPerLevel;
     }
 }

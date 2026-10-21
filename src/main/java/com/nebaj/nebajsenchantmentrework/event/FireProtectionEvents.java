@@ -1,5 +1,6 @@
 package com.nebaj.nebajsenchantmentrework.event;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -26,6 +27,7 @@ public final class FireProtectionEvents
 
     private static boolean allowDamage(LivingEntity entity, DamageSource source, float amount)
     {
+        if (!ModConfigManager.current().enchantmentBehaviour.maxedFireProtectionImmunity) return true;
         if (!source.is(DamageTypeTags.IS_FIRE)) return true;
         if (source.is(DamageTypeTags.BYPASSES_INVULNERABILITY)) return true;
 

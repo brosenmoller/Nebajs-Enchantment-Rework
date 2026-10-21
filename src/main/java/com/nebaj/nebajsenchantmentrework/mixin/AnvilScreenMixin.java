@@ -1,5 +1,6 @@
 package com.nebaj.nebajsenchantmentrework.mixin;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.Constant;
@@ -11,6 +12,6 @@ public abstract class AnvilScreenMixin
     @ModifyConstant(method = "extractLabels", constant = @Constant(intValue = 40))
     private int nebajsenchantmentrework$removeTooExpensiveThreshold(int tooExpensiveCost)
     {
-        return Integer.MAX_VALUE;
+        return ModConfigManager.current().anvil.removeTooExpensiveCap ? Integer.MAX_VALUE : tooExpensiveCost;
     }
 }

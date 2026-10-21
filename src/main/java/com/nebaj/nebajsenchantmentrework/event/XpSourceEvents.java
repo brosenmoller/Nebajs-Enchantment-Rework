@@ -1,5 +1,7 @@
 package com.nebaj.nebajsenchantmentrework.event;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import com.nebaj.nebajsenchantmentrework.data.XpSettingsLoader;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.minecraft.core.BlockPos;
@@ -9,6 +11,7 @@ import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -29,6 +32,7 @@ public final class XpSourceEvents
     public static void awardBerryHarvestXp(Level level, BlockPos pos)
     {
         if (!(level instanceof ServerLevel serverLevel)) return;
+        if (!ModConfigManager.current().experience.berryHarvestXp) return;
 
         int amount = XpSettingsLoader.INSTANCE.current().berryHarvestXp().sample(serverLevel.getRandom());
         if (amount > 0) ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), amount);
@@ -38,6 +42,7 @@ public final class XpSourceEvents
     {
         if (!(level instanceof ServerLevel serverLevel)) return;
         if (player.isCreative()) return;
+        if (!isBlockBreakXpEnabled(state)) return;
         if (!isFullyGrown(state)) return;
 
         IntProvider xp = XpSettingsLoader.INSTANCE.current().blockBreakXp().get(state.getBlock());
@@ -45,6 +50,12 @@ public final class XpSourceEvents
 
         int amount = EnchantmentHelper.processBlockExperience(serverLevel, player.getMainHandItem(), xp.sample(serverLevel.getRandom()));
         if (amount > 0) ExperienceOrb.award(serverLevel, Vec3.atCenterOf(pos), amount);
+    }
+
+    private static boolean isBlockBreakXpEnabled(BlockState state)
+    {
+        ModConfig.Experience experience = ModConfigManager.current().experience;
+        return state.is(Blocks.AMETHYST_CLUSTER) ? experience.amethystXp : experience.cropHarvestXp;
     }
 
     private static boolean isFullyGrown(BlockState state)

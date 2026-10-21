@@ -96,4 +96,4 @@ Advancements
 ==============================
 CONFIG
 ==============================
-- Add config settings for most of these things
+x - Add config settings for most of these things (Mod Menu + Cloth Config screen)

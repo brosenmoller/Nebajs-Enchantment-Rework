@@ -1,6 +1,8 @@
 package com.nebaj.nebajsenchantmentrework.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.enchantment.LocationRestrictedEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -24,9 +26,12 @@ public abstract class EnchantRandomlyFunctionMixin
     @ModifyExpressionValue(method = "run", at = @At(value = "INVOKE", target = "Ljava/util/Optional;orElseGet(Ljava/util/function/Supplier;)Ljava/lang/Object;"))
     private Object nebajsenchantmentrework$excludeLocationRestricted(Object candidates)
     {
-        boolean namesEnchantmentsDirectly = options.isPresent() && !(options.get() instanceof HolderSet.Named);
-        if (namesEnchantmentsDirectly) return candidates;
+        Stream<Holder<Enchantment>> allowed = DisabledEnchantments.withoutDisabled((Stream<Holder<Enchantment>>) candidates);
 
-        return LocationRestrictedEnchantments.withoutRestricted((Stream<Holder<Enchantment>>) candidates);
+        boolean namesEnchantmentsDirectly = options.isPresent() && !(options.get() instanceof HolderSet.Named);
+        if (namesEnchantmentsDirectly) return allowed;
+        if (!ModConfigManager.current().treasureLoot.excludeRestrictedFromRandomLoot) return allowed;
+
+        return LocationRestrictedEnchantments.withoutRestricted(allowed);
     }
 }

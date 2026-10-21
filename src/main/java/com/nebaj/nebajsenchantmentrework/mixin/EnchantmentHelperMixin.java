@@ -1,5 +1,7 @@
 package com.nebaj.nebajsenchantmentrework.mixin;
 
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
+import com.nebaj.nebajsenchantmentrework.enchantment.DisabledEnchantments;
 import com.nebaj.nebajsenchantmentrework.enchantment.LocationRestrictedEnchantments;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -17,6 +19,9 @@ public abstract class EnchantmentHelperMixin
     @ModifyVariable(method = "selectEnchantment", at = @At("HEAD"), argsOnly = true)
     private static Stream<Holder<Enchantment>> nebajsenchantmentrework$excludeLocationRestricted(Stream<Holder<Enchantment>> candidates)
     {
-        return LocationRestrictedEnchantments.withoutRestricted(candidates);
+        Stream<Holder<Enchantment>> allowed = DisabledEnchantments.withoutDisabled(candidates);
+        if (!ModConfigManager.current().treasureLoot.excludeRestrictedFromRandomLoot) return allowed;
+
+        return LocationRestrictedEnchantments.withoutRestricted(allowed);
     }
 }

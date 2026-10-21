@@ -1,7 +1,4 @@
 {
-  "xp_per_level": 20,
-  "death_drop_fraction": 0.5,
-  "grindstone_refund_fraction": 0.5,
   "fishing_xp": { "type": "minecraft:uniform", "min_inclusive": 3, "max_inclusive": 10 },
   "berry_harvest_xp": { "type": "minecraft:uniform", "min_inclusive": 0, "max_inclusive": 1 },
   "block_break_xp": {

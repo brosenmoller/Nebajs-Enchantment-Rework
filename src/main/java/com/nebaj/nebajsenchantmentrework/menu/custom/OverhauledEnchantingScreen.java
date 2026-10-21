@@ -2,6 +2,8 @@ package com.nebaj.nebajsenchantmentrework.menu.custom;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.platform.cursor.CursorTypes;
+import com.nebaj.nebajsenchantmentrework.config.CostPreset;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryConfig;
 import com.nebaj.nebajsenchantmentrework.menu.custom.OverhauledEnchantingMenu.EnchantmentEntry;
 import com.nebaj.nebajsenchantmentrework.menu.custom.OverhauledEnchantingMenu.EntryCost;
@@ -165,7 +167,7 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
             Component name = isLockedPlaceholder
                     ? Component.translatable("gui.nebajs-enchantment-rework.unknown_enchantment")
                     : Enchantment.getFullname(entry.enchantment(), displayedLevel);
-            String xpText = isLockedPlaceholder ? "" : String.valueOf(entry.cost().xp());
+            String xpText = isLockedPlaceholder || entry.cost().xp() <= 0 ? "" : String.valueOf(entry.cost().xp());
 
             int textWidth = 86 - this.font.width(xpText);
 
@@ -208,9 +210,11 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
 
     private void extractMaterialCost(GuiGraphicsExtractor graphics, EntryCost cost, int x, int y, boolean enabled)
     {
+        if (cost.materialCount() <= 0) return;
+
         ItemStack materialStack = cycledItem(cost.material().stream().toList());
         graphics.item(materialStack, x, y);
-        graphics.itemDecorations(this.font, materialStack, x, y, String.valueOf(cost.materialCount()));
+        graphics.itemDecorations(this.font, materialStack, x, y, String.valueOf(cost.materialCountFor(materialStack)));
 
         if (!enabled)
         {
@@ -235,7 +239,7 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         super.extractSlots(graphics, mouseX, mouseY);
 
         Slot materialSlot = this.menu.getSlot(OverhauledEnchantingMenu.MATERIAL_SLOT);
-        if (lapisOnly || materialSlot.hasItem()) return;
+        if (lapisOnly || expectedMaterials.isEmpty() || materialSlot.hasItem()) return;
 
         graphics.fakeItem(cycledItem(expectedMaterials), materialSlot.x, materialSlot.y);
         graphics.fill(materialSlot.x, materialSlot.y, materialSlot.x + ITEM_ICON_SIZE, materialSlot.y + ITEM_ICON_SIZE, GHOST_ITEM_OVERLAY_COLOR);
@@ -243,15 +247,26 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
 
     private List<Holder<Item>> expectedMaterials(int mouseX, int mouseY)
     {
-        Optional<EnchantmentEntry> hovered = hoveredEntry(mouseX, mouseY).filter(OverhauledEnchantingScreen::isPurchasable);
-        if (hovered.isPresent()) return hovered.get().cost().material().stream().toList();
+        if (ModConfigManager.current().enchantingTable.materialCostPreset == CostPreset.FREE) return List.of();
 
-        List<Holder<Item>> materials = this.menu.getEnchantments().stream()
+        Optional<EnchantmentEntry> hovered = hoveredEntry(mouseX, mouseY).filter(OverhauledEnchantingScreen::isPurchasable);
+        if (hovered.isPresent()) return materialsOf(hovered.get());
+
+        List<EnchantmentEntry> purchasable = this.menu.getEnchantments().stream()
                 .filter(OverhauledEnchantingScreen::isPurchasable)
-                .flatMap(entry -> entry.cost().material().stream())
+                .toList();
+        if (purchasable.isEmpty()) return LAPIS_ONLY;
+
+        return purchasable.stream()
+                .flatMap(entry -> materialsOf(entry).stream())
                 .distinct()
                 .toList();
-        return materials.isEmpty() ? LAPIS_ONLY : materials;
+    }
+
+    private static List<Holder<Item>> materialsOf(EnchantmentEntry entry)
+    {
+        if (entry.cost().materialCount() <= 0) return List.of();
+        return entry.cost().material().stream().toList();
     }
 
     private static boolean isPurchasable(EnchantmentEntry entry)
@@ -368,18 +383,25 @@ public class OverhauledEnchantingScreen extends AbstractContainerScreen<Overhaul
         EntryCost cost = entry.cost();
         ItemStack materialStack = this.menu.getMaterialStack();
         boolean infinite = this.minecraft.player.hasInfiniteMaterials();
-        boolean hasXp = infinite || this.minecraft.player.experienceLevel >= cost.xp();
-        boolean hasMaterial = infinite || (materialStack.is(cost.material()::contains) && materialStack.getCount() >= cost.materialCount());
 
-        MutableComponent experienceComponent = Component.translatable(
-                cost.xp() == 1 ? "container.enchant.level.one" : "container.enchant.level.many", cost.xp());
-        tooltip.add(experienceComponent.withStyle(hasXp ? ChatFormatting.GRAY : ChatFormatting.RED));
+        if (cost.xp() > 0)
+        {
+            boolean hasXp = infinite || this.minecraft.player.experienceLevel >= cost.xp();
+            MutableComponent experienceComponent = Component.translatable(
+                    cost.xp() == 1 ? "container.enchant.level.one" : "container.enchant.level.many", cost.xp());
+            tooltip.add(experienceComponent.withStyle(hasXp ? ChatFormatting.GRAY : ChatFormatting.RED));
+        }
 
-        MutableComponent materialComponent = EnchantmentEntryConfig.isLapis(cost.material())
-                ? Component.translatable(cost.materialCount() == 1 ? "container.enchant.lapis.one" : "container.enchant.lapis.many", cost.materialCount())
-                : Component.translatable("gui.nebajs-enchantment-rework.material_cost",
-                        cost.materialCount(), cycledItem(cost.material().stream().toList()).getHoverName());
-        tooltip.add(materialComponent.withStyle(hasMaterial ? ChatFormatting.GRAY : ChatFormatting.RED));
+        if (cost.materialCount() > 0)
+        {
+            boolean hasMaterial = infinite || (materialStack.is(cost.material()::contains) && materialStack.getCount() >= cost.materialCountFor(materialStack));
+            ItemStack shownMaterial = cycledItem(cost.material().stream().toList());
+            int shownCount = cost.materialCountFor(shownMaterial);
+            MutableComponent materialComponent = EnchantmentEntryConfig.isLapis(cost.material())
+                    ? Component.translatable(shownCount == 1 ? "container.enchant.lapis.one" : "container.enchant.lapis.many", shownCount)
+                    : Component.translatable("gui.nebajs-enchantment-rework.material_cost", shownCount, shownMaterial.getHoverName());
+            tooltip.add(materialComponent.withStyle(hasMaterial ? ChatFormatting.GRAY : ChatFormatting.RED));
+        }
 
         if (cost.requiredBookshelves() > 0)
         {

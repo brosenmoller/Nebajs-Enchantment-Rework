@@ -4,6 +4,7 @@ import com.nebaj.nebajsenchantmentrework.attachment.ModAttachments;
 import com.nebaj.nebajsenchantmentrework.attribute.ModAttributes;
 import com.nebaj.nebajsenchantmentrework.block.ModBlocks;
 import com.nebaj.nebajsenchantmentrework.component.ModDataComponents;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
 import com.nebaj.nebajsenchantmentrework.data.XpSettingsLoader;
 import com.nebaj.nebajsenchantmentrework.enchantment.ModEnchantments;
@@ -28,6 +29,8 @@ public class NebajSEnchantmentRework implements ModInitializer
     @Override
     public void onInitialize()
     {
+        ModConfigManager.load();
+
         ModAttributes.initialize();
         ModAttachments.initialize();
         ModDataComponents.initialize();

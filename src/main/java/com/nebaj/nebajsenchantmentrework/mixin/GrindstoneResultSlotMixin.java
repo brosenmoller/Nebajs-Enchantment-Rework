@@ -2,10 +2,10 @@ package com.nebaj.nebajsenchantmentrework.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.nebaj.nebajsenchantmentrework.config.ModConfig;
+import com.nebaj.nebajsenchantmentrework.config.ModConfigManager;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryConfig;
 import com.nebaj.nebajsenchantmentrework.data.EnchantmentEntryDataLoader;
-import com.nebaj.nebajsenchantmentrework.data.XpSettings;
-import com.nebaj.nebajsenchantmentrework.data.XpSettingsLoader;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.EnchantmentTags;
@@ -25,7 +25,7 @@ public abstract class GrindstoneResultSlotMixin
     @Inject(method = "getExperienceFromItem", at = @At("HEAD"), cancellable = true)
     private void nebajsenchantmentrework$refundShareOfTableCost(ItemStack item, CallbackInfoReturnable<Integer> cir)
     {
-        XpSettings settings = XpSettingsLoader.INSTANCE.current();
+        ModConfig config = ModConfigManager.current();
         int purchaseLevels = 0;
 
         for (Object2IntMap.Entry<Holder<Enchantment>> entry : EnchantmentHelper.getEnchantmentsForCrafting(item).entrySet())
@@ -33,16 +33,16 @@ public abstract class GrindstoneResultSlotMixin
             Holder<Enchantment> enchantment = entry.getKey();
             if (enchantment.is(EnchantmentTags.CURSE)) continue;
 
-            EnchantmentEntryConfig config = EnchantmentEntryDataLoader.INSTANCE
+            EnchantmentEntryConfig entryConfig = EnchantmentEntryDataLoader.INSTANCE
                 .getOrFallback(enchantment.unwrapKey().orElseThrow().identifier(), enchantment.value().getMaxLevel());
 
             for (int level = 1; level <= entry.getIntValue(); level++)
             {
-                purchaseLevels += config.costForLevel(level).xpCost();
+                purchaseLevels += config.enchantingTable.xpCostPreset.apply(entryConfig.costForLevel(level).xpCost());
             }
         }
 
-        cir.setReturnValue(Mth.floor(purchaseLevels * settings.xpPerLevel() * settings.grindstoneRefundFraction()));
+        cir.setReturnValue(Mth.floor(purchaseLevels * config.experience.xpPerLevel * config.experience.grindstoneRefundPercent / 100.0f));
     }
 
     // Vanilla returns a random 50-100% of the summed amount; return the full sum so the refund is exactly the configured share
